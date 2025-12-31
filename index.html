@@ -2,68 +2,117 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>World Explorer 3D - Free</title>
+<title>Raíces que se Cuentan</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- MAPLIBRE (100% FREE) -->
+<!-- MapLibre (100% free) -->
 <link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
 
 <style>
+:root{
+  --primary:#1b5e20;
+  --secondary:#4caf50;
+  --dark:#102017;
+  --light:#f4f7f4;
+}
+*{box-sizing:border-box}
 body{
-    margin:0;
-    font-family:Segoe UI,Arial;
-    background:#f4f6fa;
+  margin:0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background:var(--light);
+  color:#222;
 }
 header{
-    background:linear-gradient(135deg,#263238,#455a64);
-    color:white;
-    text-align:center;
-    padding:24px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:18px 25px;
+  background:linear-gradient(135deg,var(--dark),var(--primary));
+  color:white;
 }
-section{
-    max-width:1200px;
-    margin:25px auto;
-    padding:0 15px;
+.logo{
+  width:48px;
+  height:48px;
+  background:white;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--primary);
+  font-weight:800;
+  font-size:18px;
+}
+header h1{
+  margin:0;
+  font-size:22px;
+}
+header span{
+  font-size:13px;
+  opacity:.85;
+}
+main{
+  max-width:1400px;
+  margin:auto;
+  padding:20px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:20px;
+}
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
 }
 #map{
-    height:480px;
-    border-radius:14px;
+  height:520px;
+  border-radius:18px;
+  overflow:hidden;
 }
-#info{
-    background:white;
-    padding:20px;
-    border-radius:14px;
-    box-shadow:0 4px 10px rgba(0,0,0,.12);
+.panel{
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+.panel h2{
+  margin-top:0;
+  color:var(--primary);
+}
+.options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:15px;
+}
+.option{
+  padding:12px;
+  border-radius:12px;
+  background:var(--light);
+  cursor:pointer;
+  border:1px solid #ddd;
+}
+.option:hover{
+  background:#e8f5e9;
+  border-color:var(--secondary);
 }
 button{
-    width:100%;
-    padding:12px;
-    background:#455a64;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    margin-top:12px;
+  width:100%;
+  margin-top:15px;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  background:var(--primary);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
 }
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-    gap:15px;
-    margin-top:20px;
-}
-.card{
-    background:white;
-    padding:15px;
-    border-radius:12px;
-    text-align:center;
-    box-shadow:0 3px 8px rgba(0,0,0,.1);
-}
+button:hover{background:#2e7d32}
 footer{
-    background:#263238;
-    color:white;
-    text-align:center;
-    padding:20px;
+  margin-top:30px;
+  text-align:center;
+  color:#666;
+  font-size:13px;
 }
 </style>
 </head>
@@ -71,150 +120,139 @@ footer{
 <body>
 
 <header>
-<h1>🌍 World Explorer 3D</h1>
-<p>Explora la historia y rutas reales del mundo — 100% libre</p>
+  <div class="logo">🌿</div>
+  <div>
+    <h1>Raíces que se Cuentan</h1>
+    <span>Explorando historia, cultura y caminos reales</span>
+  </div>
 </header>
 
-<section>
-<h2>Mapa 3D Mundial</h2>
-<div id="map"></div>
-</section>
+<main>
 
-<section id="info">
-<h2 id="placeTitle">Selecciona un lugar</h2>
-<p id="placeDesc">Haz clic sobre un punto del mapa para conocer su historia.</p>
-</section>
+<div class="grid">
 
-<section>
-<h2>Ruta real desde tu ubicación</h2>
-<button onclick="calcularRuta()">📍 Calcular ruta real</button>
+  <!-- MAPA -->
+  <div id="map"></div>
 
-<div class="cards">
-<div class="card">🍽️ Gastronomía</div>
-<div class="card">🏨 Hospedaje</div>
-<div class="card">🛂 Documentos</div>
-<div class="card">🩺 Seguro médico</div>
-<div class="card">🚍 Transporte</div>
-<div class="card">🎉 Festividades</div>
+  <!-- PANEL -->
+  <div class="panel">
+    <h2 id="title">Selecciona un destino</h2>
+    <p id="desc">Explora el origen, historia y experiencias culturales del lugar.</p>
+
+    <button onclick="usarUbicacion()">📍 Usar mi ubicación actual</button>
+    <button onclick="calcularRuta()">🗺️ Calcular ruta real</button>
+
+    <h3>Más información del destino</h3>
+    <div class="options">
+      <div class="option">🏛 Historia y origen</div>
+      <div class="option">🍽 Gastronomía típica</div>
+      <div class="option">🏨 Hospedaje</div>
+      <div class="option">🛂 Documentación</div>
+      <div class="option">🩺 Salud y seguros</div>
+      <div class="option">🎉 Festividades</div>
+    </div>
+  </div>
+
 </div>
-</section>
 
 <footer>
-Proyecto académico | OpenStreetMap + MapLibre + OSRM
+Proyecto académico · OpenStreetMap · MapLibre · OSRM · 100% libre
 </footer>
 
-<script>
-/* ================= MAPA 3D ================= */
-const map = new maplibregl.Map({
-    container: 'map',
-    style: {
-        "version": 8,
-        "sources": {
-            "osm": {
-                "type": "raster",
-                "tiles": [
-                    "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ],
-                "tileSize": 256
-            }
-        },
-        "layers": [
-            {
-                "id": "osm",
-                "type": "raster",
-                "source": "osm"
-            }
-        ]
-    },
-    center: [0,20],
-    zoom: 2,
-    pitch: 60,
-    bearing: -20
-});
+</main>
 
+<script>
+/* MAPA 3D */
+const map = new maplibregl.Map({
+  container:'map',
+  style:{
+    version:8,
+    sources:{
+      osm:{
+        type:'raster',
+        tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        tileSize:256
+      }
+    },
+    layers:[{id:'osm',type:'raster',source:'osm'}]
+  },
+  center:[0,20],
+  zoom:2,
+  pitch:60,
+  bearing:-20
+});
 map.addControl(new maplibregl.NavigationControl());
 
-/* ================= LUGARES ================= */
-const lugares = [
+let destino=null;
+let origen=null;
+
+const lugares=[
 {
-    nombre:"Cusco - Perú",
-    coords:[-71.9675,-13.5319],
-    desc:"Capital del Imperio Inca, centro espiritual y cultural."
+  nombre:"Cusco, Perú",
+  coords:[-71.9675,-13.5319],
+  desc:"Antigua capital del Imperio Inca, centro espiritual y cultural andino."
 },
 {
-    nombre:"Petra - Jordania",
-    coords:[35.4444,30.3285],
-    desc:"Ciudad nabatea tallada en roca, patrimonio de la humanidad."
+  nombre:"Petra, Jordania",
+  coords:[35.4444,30.3285],
+  desc:"Ciudad nabatea esculpida en roca, patrimonio cultural de la humanidad."
 },
 {
-    nombre:"Kioto - Japón",
-    coords:[135.7681,35.0116],
-    desc:"Ciudad histórica japonesa, templos y tradiciones milenarias."
+  nombre:"Kioto, Japón",
+  coords:[135.7681,35.0116],
+  desc:"Corazón tradicional japonés, templos, rituales y festivales."
 }
 ];
 
-let destino=null;
-
 lugares.forEach(l=>{
-    const marker=document.createElement("div");
-    marker.style.width="14px";
-    marker.style.height="14px";
-    marker.style.background="#d32f2f";
-    marker.style.borderRadius="50%";
+  const el=document.createElement("div");
+  el.style.width="14px";
+  el.style.height="14px";
+  el.style.background="#2e7d32";
+  el.style.borderRadius="50%";
 
-    new maplibregl.Marker(marker)
-        .setLngLat(l.coords)
-        .addTo(map)
-        .getElement()
-        .addEventListener("click",()=>{
-            document.getElementById("placeTitle").innerText=l.nombre;
-            document.getElementById("placeDesc").innerText=l.desc;
-            destino=l.coords;
-            map.flyTo({center:l.coords,zoom:11,pitch:65});
-        });
+  new maplibregl.Marker(el)
+    .setLngLat(l.coords)
+    .addTo(map)
+    .getElement()
+    .onclick=()=>{
+      destino=l.coords;
+      document.getElementById("title").innerText=l.nombre;
+      document.getElementById("desc").innerText=l.desc;
+      map.flyTo({center:l.coords,zoom:11,pitch:65});
+    };
 });
 
-/* ================= RUTA REAL (OSRM) ================= */
+/* UBICACIÓN */
+function usarUbicacion(){
+  navigator.geolocation.getCurrentPosition(p=>{
+    origen=[p.coords.longitude,p.coords.latitude];
+    alert("Ubicación detectada correctamente");
+  });
+}
+
+/* RUTA REAL */
 function calcularRuta(){
-    if(!destino){
-        alert("Selecciona primero un destino");
-        return;
+  if(!origen||!destino){
+    alert("Selecciona ubicación y destino");
+    return;
+  }
+  fetch(`https://router.project-osrm.org/route/v1/driving/${origen.join(",")};${destino.join(",")}?geometries=geojson`)
+  .then(r=>r.json())
+  .then(d=>{
+    const g=d.routes[0].geometry;
+    if(map.getSource("route")){
+      map.getSource("route").setData({type:"Feature",geometry:g});
+    }else{
+      map.addSource("route",{type:"geojson",data:{type:"Feature",geometry:g}});
+      map.addLayer({
+        id:"route",
+        type:"line",
+        source:"route",
+        paint:{'line-color':'#ff5722','line-width':5}
+      });
     }
-
-    navigator.geolocation.getCurrentPosition(pos=>{
-        const origen=[pos.coords.longitude,pos.coords.latitude];
-
-        fetch(`https://router.project-osrm.org/route/v1/driving/${origen.join(",")};${destino.join(",")}?overview=full&geometries=geojson`)
-        .then(r=>r.json())
-        .then(data=>{
-            const route=data.routes[0].geometry;
-
-            if(map.getSource("route")){
-                map.getSource("route").setData({
-                    type:"Feature",
-                    geometry:route
-                });
-            }else{
-                map.addSource("route",{
-                    type:"geojson",
-                    data:{
-                        type:"Feature",
-                        geometry:route
-                    }
-                });
-
-                map.addLayer({
-                    id:"route",
-                    type:"line",
-                    source:"route",
-                    paint:{
-                        "line-color":"#ff1744",
-                        "line-width":5
-                    }
-                });
-            }
-        });
-    });
+  });
 }
 </script>
 
