@@ -80,7 +80,7 @@
     <a href="#" onclick="show('explorar')">Atlas & Ciudades</a>
     <a href="#" onclick="show('itinerario')">Mi Itinerario</a>
     <a href="#" onclick="show('gastos')">Gastos</a>
-    <a href="#" onclick="show('startup')">La Startup</a>
+    <a href="#" onclick="show('Sobre nosotros')">Sobre nosotros</a>
 </div>
 
 <main>
@@ -126,17 +126,18 @@
         <div id="expenseBreakdown"></div>
     </section>
 
-    <section id="startup">
+    <section id="Sobre nosotros">
         <div class="card" style="border-top: 10px solid var(--accent);">
-            <h2 style="font-family:'Playfair Display'; font-size:3rem; margin-bottom:20px;">Startup: Raíces que se cuentan</h2>
+            <h2 style="font-family:'Playfair Display'; font-size:3rem; margin-bottom:20px;"> Raíces que se cuentan </h2>
             <p style="font-size:1.2rem; line-height:1.8; color:#333;">
                 Es un <b>canal innovador</b> que une las raíces con el descubrimiento de nuevas culturas. 
-                Nacemos para transformar la curiosidad histórica en experiencias de viaje inteligentes, 
-                mapeando la gastronomía, la arquitectura y los requisitos consulares en una sola red interactiva.
+                Nacemos para transformar la curiosidad histórica y arquitectónica en experiencias de viaje inteligentes, 
+                mapeando la cultura, orígenes, gastronomía, la arquitectura y los requisitos consulares en una sola red interactiva.
             </p>
             <div class="info-grid" style="margin-top:40px;">
                 <div class="info-box"><h5>Identidad</h5><p>Conectamos tu pasado con tu próximo destino.</p></div>
                 <div class="info-box"><h5>Tecnología</h5><p>Visualización geoespacial de alta fidelidad.</p></div>
+                <div class="info-box"><h5>Arquitectura</h5>La arquitectura refleja la identidad cultural y histórica de un pueblo a través de sus formas, materiales y símbolos.</p></div>
             </div>
         </div>
     </section>
@@ -215,34 +216,32 @@
                 }
             }
         },
-
-  "Angola": {
-    zona: "África",
-    embajada: "Visa electrónica disponible.",
-    vuelos: "TAAG Angola Airlines. Hub: Luanda.",
-    ciudades: {
-      "Luanda": {
-        h: "Capital costera con pasado colonial portugués.",
-        g: "Moamba de galinha, pescados.",
-        s: "Epic Sana Luanda.",
-        c: [13.24, -8.84]
-      }
-    }
-  },
-
-  "Antigua y Barbuda": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 180 días.",
-    vuelos: "Conexiones vía Miami y Londres.",
-    ciudades: {
-      "St. John's": {
-        h: "Capital caribeña de origen colonial.",
-        g: "Mariscos caribeños.",
-        s: "Blue Waters Resort.",
-        c: [-61.85, 17.12]
-      }
-    }
-  },
+        "Angola": {
+            zona: "África",
+            embajada: "Visa electrónica disponible.",
+            vuelos: "TAAG Angola Airlines. Hub: Luanda.",
+            ciudades: {
+                "Luanda": {
+                    h: "Capital costera con pasado colonial portugués.",
+                    g: "Moamba de galinha, pescados.",
+                    s: "Epic Sana Luanda.",
+                    c: [13.24, -8.84]
+                }
+            }
+        },
+        "Antigua y Barbuda": {
+            zona: "América Central",
+            embajada: "Sin visa hasta 180 días.",
+            vuelos: "Conexiones vía Miami y Londres.",
+            ciudades: {
+                "St. John's": {
+                    h: "Capital caribeña de origen colonial.",
+                    g: "Mariscos caribeños.",
+                    s: "Blue Waters Resort.",
+                    c: [-61.85, 17.12]
+                }
+            }
+        },
 
   "Argentina": {
     zona: "América del Sur",
@@ -510,9 +509,8 @@
         c: [23.32, 42.70]
       }
     }
-  }
-
-};
+  },
+    
   "Camboya": {
     zona: "Asia",
     embajada: "Visa a la llegada o e-visa.",
@@ -1406,7 +1404,7 @@
     }
   }
 
-};
+},
   "Omán": {
     zona: "Medio Oriente",
     embajada: "Visa electrónica obligatoria.",
@@ -1574,8 +1572,7 @@
       }
     }
   }
-
-};
+},
   "Reino Unido": {
     zona: "Europa",
     embajada: "ETA obligatoria para turismo.",
@@ -1838,7 +1835,7 @@
     }
   }
 
-};
+},
     // --- INICIALIZACIÓN ---
     const countrySel = document.getElementById('countrySel');
     for (let p in worldDB) {
