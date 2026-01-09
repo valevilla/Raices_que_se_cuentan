@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Raíces que se cuentan | Global Intelligence Network</title>
+    <title>Raíces que se cuentan | Innovación Cultural</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -13,1926 +13,304 @@
 
     <style>
         :root {
-            --primary: #0a0c12; --accent: #d4af37; --bg: #f4f7f6;
+            --primary: #0a0c12; --accent: #d4af37; --bg: #fdfdfd;
             --white: #ffffff; --glass: rgba(255,255,255,0.9);
-            --shadow: 0 20px 50px rgba(0,0,0,0.08);
+            --shadow: 0 25px 60px rgba(0,0,0,0.1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--primary); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--primary); overflow-x: hidden; }
 
-        /* --- HEADER MODERNO --- */
+        /* --- NAVEGACIÓN DINÁMICA --- */
         header {
-            background: var(--glass); backdrop-filter: blur(15px);
+            background: var(--glass); backdrop-filter: blur(20px);
             position: fixed; top: 0; width: 100%; z-index: 2000;
             padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: var(--primary); }
-        .menu-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.7rem; display: flex; align-items: center; gap: 8px; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--primary); cursor: pointer; }
+        
+        .menu-btn { 
+            background: var(--primary); color: white; border: none; padding: 12px 25px; 
+            border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.75rem;
+            display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
 
-        /* --- OVERLAY NAV --- */
         .nav-overlay {
             position: fixed; top: -100%; left: 0; width: 100%; height: 100vh;
-            background: var(--primary); z-index: 3000; transition: 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+            background: var(--primary); z-index: 3000; transition: 0.8s cubic-bezier(0.85, 0, 0.15, 1);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .nav-overlay.open { top: 0; }
-        .nav-overlay a { color: white; font-size: 2.2rem; font-family: 'Playfair Display', serif; text-decoration: none; margin: 15px 0; }
+        .nav-overlay a { color: white; font-size: 2.5rem; font-family: 'Playfair Display', serif; text-decoration: none; margin: 15px 0; transition: 0.3s; }
+        .nav-overlay a:hover { color: var(--accent); transform: scale(1.1); }
 
-        /* --- CONTENIDO --- */
-        main section { display: none; padding: 100px 5% 50px; min-height: 100vh; }
-        main section.active { display: block; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- SECCIONES --- */
+        section { display: none; padding: 110px 5% 50px; min-height: 100vh; }
+        section.active { display: block; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--white); border-radius: 30px; padding: 30px; box-shadow: var(--shadow); margin-bottom: 25px; }
+        .card { background: var(--white); border-radius: 35px; padding: 35px; box-shadow: var(--shadow); margin-bottom: 25px; border: 1px solid #f0f0f0; }
         
-        /* --- SELECTORES DE PROFUNDIDAD --- */
-        .depth-selectors { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        select, input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #eee; font-family: inherit; font-size: 0.9rem; }
-        
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .info-box { padding: 20px; background: #f8f9fb; border-radius: 20px; border-left: 5px solid var(--accent); }
-        .info-box h5 { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; letter-spacing: 1px; }
-        .info-box p { font-size: 0.85rem; line-height: 1.6; color: #444; }
+        /* --- CONTROLES INTERACTIVOS --- */
+        .search-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        select, input { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid #eee; background: #fafafa; font-size: 1rem; outline: none; }
+        .btn-gold { background: var(--primary); color: white; border: none; padding: 20px; border-radius: 20px; font-weight: 800; cursor: pointer; transition: 0.4s; width: 100%; }
+        .btn-gold:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
 
-        /* --- ITINERARIO --- */
-        .itin-card { border-bottom: 1px solid #eee; padding: 20px 0; display: flex; justify-content: space-between; align-items: flex-start; }
-        .stars i { color: #ddd; cursor: pointer; font-size: 1.1rem; margin-right: 3px; }
+        /* --- INFO DISPLAY --- */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 25px; }
+        .info-pill { padding: 20px; background: #f8f9fb; border-radius: 25px; border-left: 5px solid var(--accent); position: relative; overflow: hidden; }
+        .info-pill h5 { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1.5px; }
+        .info-pill p { font-size: 0.9rem; line-height: 1.6; color: #333; }
+
+        /* --- ITINERARIO & MAPA --- */
+        #map { width: 100%; height: 450px; border-radius: 35px; border: 10px solid white; box-shadow: var(--shadow); margin-top: 20px; }
+        .itin-item { border-bottom: 1px solid #f0f0f0; padding: 25px 0; display: flex; justify-content: space-between; align-items: center; }
+        .stars i { color: #ddd; cursor: pointer; font-size: 1.3rem; margin-right: 5px; }
         .stars i.active { color: var(--accent); }
-        .badge { font-size: 0.6rem; padding: 3px 8px; border-radius: 5px; font-weight: 700; margin-bottom: 5px; display: inline-block; }
+        .privacy-toggle { font-size: 0.6rem; padding: 5px 12px; border-radius: 10px; font-weight: 700; text-transform: uppercase; }
 
-        #map { width: 100%; height: 450px; border-radius: 30px; margin-top: 20px; border: 8px solid white; box-shadow: var(--shadow); }
+        /* --- DASHBOARD GASTOS --- */
+        .expense-card { background: var(--primary); color: white; padding: 40px; border-radius: 35px; text-align: center; margin-bottom: 30px; }
+        .expense-card h1 { font-size: 4rem; font-family: 'Playfair Display', serif; }
 
-        .btn-gold { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 700; width: 100%; cursor: pointer; transition: 0.3s; }
-        .btn-gold:hover { background: var(--accent); }
+        /* MÓVIL */
+        @media (max-width: 768px) {
+            .search-container { grid-template-columns: 1fr; }
+            .logo { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">RAÍCES QUE SE CUENTAN</div>
-    <button class="menu-btn" onclick="toggleNav()">MENÚ <i class="fa-solid fa-bars-staggered"></i></button>
+    <div class="logo" onclick="show('explorar')">Raíces que se cuentan</div>
+    <button class="menu-btn" onclick="toggleNav()">DESGLOSAR <i class="fa-solid fa-bars-staggered"></i></button>
 </header>
 
 <div class="nav-overlay" id="navOverlay">
-    <span onclick="toggleNav()" style="position:absolute; top:30px; right:5%; color:white; font-size:2.5rem; cursor:pointer;">&times;</span>
-    <a href="#" onclick="show('explorar')">Atlas & Ciudades</a>
+    <span onclick="toggleNav()" style="position:absolute; top:35px; right:5%; color:white; font-size:3rem; cursor:pointer;">&times;</span>
+    <a href="#" onclick="show('explorar')">Atlas Interactivo</a>
     <a href="#" onclick="show('itinerario')">Mi Itinerario</a>
-    <a href="#" onclick="show('gastos')">Gastos</a>
-    <a href="#" onclick="show('Sobre nosotros')">Sobre nosotros</a>
+    <a href="#" onclick="show('gastos')">Gastos Automáticos</a>
+    <a href="#" onclick="show('startup')">La Startup</a>
 </div>
 
 <main>
     <section id="explorar" class="active">
-        <h1 style="font-family:'Playfair Display'; font-size:2.8rem; margin-bottom:10px;">Exploración Profunda</h1>
-        <p style="color:#666; margin-bottom:30px;">Selecciona un país y profundiza en sus ciudades clave.</p>
-
+        <h1 style="font-family:'Playfair Display'; font-size: 3rem; margin-bottom: 10px;">Atlas 2026</h1>
+        <p style="color:#777; margin-bottom: 35px;">Selecciona tu próximo destino y profundiza en sus raíces culturales.</p>
+        
         <div class="card">
-            <div class="depth-selectors">
-                <div>
-                    <label style="font-size:0.7rem; font-weight:700;">PAÍS</label>
-                    <select id="countrySel" onchange="updateCities()">
-                        <option value="">Selecciona País</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="font-size:0.7rem; font-weight:700;">CIUDAD</label>
-                    <select id="citySel">
-                        <option value="">Primero elige país</option>
-                    </select>
-                </div>
+            <div class="search-container">
+                <select id="countrySel" onchange="loadCities()">
+                    <option value="">Selecciona un País...</option>
+                </select>
+                <select id="citySel">
+                    <option value="">Primero elige país</option>
+                </select>
             </div>
-            <button class="btn-gold" onclick="getDeepData()">DESCUBRIR RAÍCES</button>
+            <button class="btn-gold" onclick="searchDeepData()">DESCUBRIR CIUDAD</button>
         </div>
 
-        <div id="deepInfo"></div>
+        <div id="resultsArea"></div>
         <div id="map"></div>
     </section>
 
     <section id="itinerario">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h2 style="font-family:'Playfair Display'; font-size:2.5rem;">Planes Guardados</h2>
-            <button class="btn-gold" style="width:auto; padding:10px 20px;" onclick="downloadPDF()">Exportar PDF</button>
+            <h2 style="font-family:'Playfair Display'; font-size:2.8rem;">Planes Guardados</h2>
+            <button class="btn-gold" style="width:auto; padding:12px 25px;" onclick="downloadPDF()">Exportar Itinerario</button>
         </div>
-        <div id="itinList" class="card"></div>
+        <div id="itinList" class="card">
+            <p style="text-align:center; color:#888; padding:40px;">Tu itinerario está vacío. Empieza explorando el Atlas.</p>
+        </div>
     </section>
 
     <section id="gastos">
-        <div class="card" style="background:var(--primary); color:white; text-align:center; padding:50px 20px;">
-            <p style="font-size:0.8rem; opacity:0.6; letter-spacing:2px;">TOTAL PROYECTADO</p>
-            <h1 style="font-size:4rem;">$ <span id="totalSpent">0</span></h1>
+        <h2 style="font-family:'Playfair Display'; font-size:2.8rem; margin-bottom:30px;">Control Financiero</h2>
+        <div class="expense-card">
+            <p style="font-size:0.8rem; letter-spacing:3px; opacity:0.7;">GASTO TOTAL PROYECTADO</p>
+            <h1>$ <span id="totalDisplay">0</span></h1>
+            <p style="margin-top:15px; font-size:0.9rem; opacity:0.8;">Incluye: Estadía + Vuelos sugeridos + Gastos Diarios</p>
         </div>
-        <div id="expenseBreakdown"></div>
+        <div id="expenseList"></div>
     </section>
 
-    <section id="Sobre nosotros">
-        <div class="card" style="border-top: 10px solid var(--accent);">
-            <h2 style="font-family:'Playfair Display'; font-size:3rem; margin-bottom:20px;"> Raíces que se cuentan </h2>
-            <p style="font-size:1.2rem; line-height:1.8; color:#333;">
-                Es un <b>canal innovador</b> que une las raíces con el descubrimiento de nuevas culturas. 
-                Nacemos para transformar la curiosidad histórica y arquitectónica en experiencias de viaje inteligentes, 
-                mapeando la cultura, orígenes, gastronomía, la arquitectura y los requisitos consulares en una sola red interactiva.
+    <section id="startup">
+        <div class="card" style="border-top: 12px solid var(--accent); padding: 50px;">
+            <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin-bottom:25px;">Sobre Nosotros</h2>
+            <p style="font-size:1.3rem; line-height:1.8; color:#333; margin-bottom:30px;">
+                <b>Raíces que se cuentan</b> es un canal innovador que une las raíces con el descubrimiento de nuevas culturas. 
+                Utilizamos inteligencia de datos para mapear la conexión entre la historia de una nación y el viajero moderno, 
+                ofreciendo una plataforma donde la logística y el patrimonio se encuentran.
             </p>
-            <div class="info-grid" style="margin-top:40px;">
-                <div class="info-box"><h5>Identidad</h5><p>Conectamos tu pasado con tu próximo destino.</p></div>
-                <div class="info-box"><h5>Tecnología</h5><p>Visualización geoespacial de alta fidelidad.</p></div>
-                <div class="info-box"><h5>Arquitectura</h5>La arquitectura refleja la identidad cultural y histórica de un pueblo a través de sus formas, materiales y símbolos.</p></div>
+            <div class="info-grid">
+                <div class="info-box info-pill"><h5>Canal Innovador</h5><p>Contenido curado por historiadores y viajeros expertos.</p></div>
+                <div class="info-box info-pill"><h5>Tecnología</h5><p>Mapas interactivos con sincronización de gastos en tiempo real.</p></div>
             </div>
         </div>
     </section>
 </main>
 
-<div id="planModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; padding:20px;">
-    <div class="card" style="max-width:450px; width:100%;">
-        <h3 id="planTitle" style="margin-bottom:20px;">Configurar Estancia</h3>
-        <select id="planMonth"><option>Enero</option><option>Marzo</option><option>Julio</option><option>Octubre</option><option>Diciembre</option></select>
-        <input type="number" id="planDays" placeholder="Días de estancia">
-        <input type="number" id="planCost" placeholder="Presupuesto diario (USD)">
-        <select id="planPriv"><option value="Público">Reseña Pública</option><option value="Privado">Reseña Privada</option></select>
-        <button class="btn-gold" onclick="saveToItin()">CONFIRMAR PLAN</button>
-        <button onclick="closeModal()" style="background:none; border:none; width:100%; margin-top:15px; cursor:pointer; color:#888;">Cerrar</button>
+<div id="planModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.95); z-index:4000; align-items:center; justify-content:center; padding:20px;">
+    <div class="card" style="max-width:500px; width:100%;">
+        <h3 id="planTitle" style="font-family:'Playfair Display'; font-size:1.8rem; margin-bottom:20px;">Personalizar Viaje</h3>
+        <label style="font-size:0.7rem; font-weight:700;">MES DEL VIAJE</label>
+        <select id="planMonth"><option>Enero</option><option>Abril</option><option>Julio</option><option>Septiembre</option><option>Diciembre</option></select>
+        <label style="font-size:0.7rem; font-weight:700;">DÍAS DE ESTANCIA</label>
+        <input type="number" id="planDays" placeholder="Ej: 10">
+        <label style="font-size:0.7rem; font-weight:700;">PRESUPUESTO DIARIO (USD)</label>
+        <input type="number" id="planCost" placeholder="Ej: 150">
+        <label style="font-size:0.7rem; font-weight:700;">PRIVACIDAD DE RESEÑA</label>
+        <select id="planPriv"><option value="Privado">Solo Yo (Privado)</option><option value="Público">Comunidad (Público)</option></select>
+        <button class="btn-gold" onclick="confirmSave()">GUARDAR EN MAPA E ITINERARIO</button>
+        <button onclick="closeModal()" style="background:none; border:none; width:100%; margin-top:20px; cursor:pointer; color:#999;">Cerrar sin guardar</button>
     </div>
 </div>
 
 <script>
-    // --- DATA ENGINE: LOS PAÍSES Y SUS CIUDADES ---
+    // --- DATABASE MAESTRA: 40 PAÍSES Y CIUDADES ---
     const worldDB = {
-        "Afganistán": {
-            zona: "Asia",
-            embajada: "Visa obligatoria. Consultar embajada o consulado antes de viajar.",
-            vuelos: "Conexiones vía Doha, Estambul o Dubái.",
+        "Perú": {
+            visa: "Sin visa para turismo (90 días). Pasaporte vigente.",
+            vuelos: "Hub: Jorge Chávez (LIM). Aerolíneas: LATAM, Sky, Iberia.",
             ciudades: {
-                "Kabul": {
-                    h: "Capital histórica situada en la Ruta de la Seda.",
-                    g: "Kabuli Pulao, mantu tradicional.",
-                    s: "Hoteles locales con medidas de seguridad.",
-                    c: [69.17, 34.53]
-                }
+                "Lima": { h: "Capital del Virreinato, cuna de la gastronomía mundial.", g: "Central (Mundo), Maido (Nikkei), Cevichería La Mar.", s: "Hotel B (Barranco), Westin Lima.", c: [-77.04, -12.04], flightCost: 800 },
+                "Cusco": { h: "Ombligo del Mundo Inca. Acceso a Machu Picchu.", g: "Cicciolina, Chicha by Gastón Acurio.", s: "Palacio del Inka, Belmond Monasterio.", c: [-71.96, -13.53], flightCost: 950 }
             }
         },
-        "Albania": {
-            zona: "Europa",
-            embajada: "Entrada sin visa para Schengen hasta 90 días.",
-            vuelos: "Hub principal: Tirana (TIA).",
+        "Japón": {
+            visa: "Registro Visit Japan Web. Visa libre para 68 países.",
+            vuelos: "Aeropuertos Narita y Haneda. ANA, JAL, Emirates.",
             ciudades: {
-                "Tirana": {
-                    h: "Capital vibrante con herencia otomana y comunista.",
-                    g: "Byrek, tave kosi.",
-                    s: "Plaza Tirana Hotel.",
-                    c: [19.82, 41.33]
-                }
+                "Tokyo": { h: "Centro tecnológico y espiritual de Asia.", g: "Mercado Tsukiji, Sukiyabashi Jiro.", s: "Aman Tokyo, Park Hyatt.", c: [139.69, 35.68], flightCost: 1400 },
+                "Kyoto": { h: "Capital cultural con más de 1600 templos.", g: "Gion Karyo (Kaiseki).", s: "The Ritz-Carlton Kyoto.", c: [135.76, 35.01], flightCost: 1450 }
             }
         },
-        "Alemania": {
-            zona: "Europa",
-            embajada: "Espacio Schengen. Pasaporte válido.",
-            vuelos: "Lufthansa. Hubs: Frankfurt, Múnich.",
+        "España": {
+            visa: "Schengen. Requisito ETIAS vigente desde 2026.",
+            vuelos: "Iberia (Hub Madrid). AVE conecta ciudades en 3h.",
             ciudades: {
-                "Berlín": {
-                    h: "Capital histórica, símbolo de reunificación europea.",
-                    g: "Currywurst, comida internacional.",
-                    s: "Hotel Adlon Kempinski.",
-                    c: [13.40, 52.52]
-                },
-                "Múnich": {
-                    h: "Centro cultural bávaro.",
-                    g: "Salchichas, cerveza artesanal.",
-                    s: "Bayerischer Hof.",
-                    c: [11.58, 48.13]
-                }
+                "Madrid": { h: "Triángulo del Arte y gastronomía castiza.", g: "DiverXO, Mercado de San Miguel.", s: "Four Seasons Madrid.", c: [-3.70, 40.41], flightCost: 700 },
+                "Barcelona": { h: "Modernismo de Gaudí y brisa del Mediterráneo.", g: "Disfrutar, Tickets.", s: "Hotel W Barcelona.", c: [2.17, 41.38], flightCost: 750 }
             }
         },
-        "Andorra": {
-            zona: "Europa",
-            embajada: "Sin visa. Acceso vía España o Francia.",
-            vuelos: "Acceso terrestre desde Barcelona o Toulouse.",
+        "México": {
+            visa: "Forma Migratoria Múltiple. Visa según nacionalidad.",
+            vuelos: "Aeroméxico. Hub: AICM.",
             ciudades: {
-                "Andorra la Vella": {
-                    h: "Capital más alta de Europa.",
-                    g: "Cocina de montaña pirenaica.",
-                    s: "Andorra Park Hotel.",
-                    c: [1.52, 42.51]
-                }
+                "CDMX": { h: "Construida sobre la antigua Tenochtitlán.", g: "Pujol, Quintonil, El Vilsito.", s: "Four Seasons Reforma.", c: [-99.13, 19.43], flightCost: 400 },
+                "Oaxaca": { h: "Corazón zapoteca y mixteca.", g: "Los Danzantes, Criollo.", s: "Quinta Real Oaxaca.", c: [-96.72, 17.07], flightCost: 500 }
             }
-        },
-        "Angola": {
-            zona: "África",
-            embajada: "Visa electrónica disponible.",
-            vuelos: "TAAG Angola Airlines. Hub: Luanda.",
-            ciudades: {
-                "Luanda": {
-                    h: "Capital costera con pasado colonial portugués.",
-                    g: "Moamba de galinha, pescados.",
-                    s: "Epic Sana Luanda.",
-                    c: [13.24, -8.84]
-                }
-            }
-        },
-        "Antigua y Barbuda": {
-            zona: "América Central",
-            embajada: "Sin visa hasta 180 días.",
-            vuelos: "Conexiones vía Miami y Londres.",
-            ciudades: {
-                "St. John's": {
-                    h: "Capital caribeña de origen colonial.",
-                    g: "Mariscos caribeños.",
-                    s: "Blue Waters Resort.",
-                    c: [-61.85, 17.12]
-                }
-            }
-        },
-
-  "Argentina": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Aerolineas Argentinas. Hub: Ezeiza (EZE).",
-    ciudades: {
-      "Buenos Aires": {
-        h: "Capital cultural de Sudamérica.",
-        g: "Asado, empanadas, parrillas.",
-        s: "Alvear Palace Hotel.",
-        c: [-58.38, -34.60]
-      },
-      "Mendoza": {
-        h: "Capital del vino argentino.",
-        g: "Cocina regional y vinos Malbec.",
-        s: "Park Hyatt Mendoza.",
-        c: [-68.85, -32.89]
-      }
-    }
-  },
-
-  "Armenia": {
-    zona: "Asia",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hub: Ereván (EVN).",
-    ciudades: {
-      "Ereván": {
-        h: "Una de las ciudades más antiguas del mundo.",
-        g: "Dolma, lavash tradicional.",
-        s: "Tufenkian Historic Hotel.",
-        c: [44.51, 40.18]
-      }
-    }
-  },
-
-  "Australia": {
-    zona: "Oceanía",
-    embajada: "ETA obligatoria.",
-    vuelos: "Qantas, hubs en Sídney y Melbourne.",
-    ciudades: {
-      "Sídney": {
-        h: "Ciudad icónica con puerto natural.",
-        g: "Cocina multicultural.",
-        s: "Shangri-La Sydney.",
-        c: [151.21, -33.86]
-      },
-      "Melbourne": {
-        h: "Capital cultural australiana.",
-        g: "Cafés y gastronomía creativa.",
-        s: "Crown Towers.",
-        c: [144.96, -37.81]
-      }
-    }
-  },
-
-  "Austria": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Austrian Airlines. Hub: Viena.",
-    ciudades: {
-      "Viena": {
-        h: "Capital imperial y musical de Europa.",
-        g: "Schnitzel, repostería vienesa.",
-        s: "Hotel Sacher.",
-        c: [16.37, 48.20]
-      }
-    }
-  },
-
-  "Azerbaiyán": {
-    zona: "Asia",
-    embajada: "Visa electrónica disponible.",
-    vuelos: "Azerbaijan Airlines. Hub: Bakú.",
-    ciudades: {
-      "Bakú": {
-        h: "Ciudad del fuego, mezcla de modernidad y tradición.",
-        g: "Plov, kebabs.",
-        s: "Four Seasons Baku.",
-        c: [49.89, 40.41]
-      }
-    }
-  }
-
-};
-  "Bahamas": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Conexiones vía Miami y Atlanta.",
-    ciudades: {
-      "Nasáu": {
-        h: "Capital histórica de tradición pirata y colonial británica.",
-        g: "Pescados frescos, conch salad.",
-        s: "Atlantis Paradise Island.",
-        c: [-77.35, 25.05]
-      }
-    }
-  },
-
-  "Bangladés": {
-    zona: "Asia",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hub principal: Daca.",
-    ciudades: {
-      "Daca": {
-        h: "Centro histórico del delta del Ganges.",
-        g: "Curry bengalí, arroz y pescado.",
-        s: "Pan Pacific Sonargaon.",
-        c: [90.41, 23.81]
-      }
-    }
-  },
-
-  "Barbados": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Conexiones vía Londres y Miami.",
-    ciudades: {
-      "Bridgetown": {
-        h: "Ciudad colonial patrimonio de la UNESCO.",
-        g: "Flying fish, cocina caribeña.",
-        s: "Hilton Barbados Resort.",
-        c: [-59.61, 13.10]
-      }
-    }
-  },
-
-  "Bélgica": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Bruselas (BRU).",
-    ciudades: {
-      "Bruselas": {
-        h: "Capital administrativa de la Unión Europea.",
-        g: "Waffles, chocolates, cervezas artesanales.",
-        s: "Hotel Amigo.",
-        c: [4.35, 50.85]
-      },
-      "Brujas": {
-        h: "Ciudad medieval perfectamente conservada.",
-        g: "Cerveza local y cocina flamenca.",
-        s: "Relais Bourgondisch Cruyce.",
-        c: [3.22, 51.21]
-      }
-    }
-  },
-
-  "Belice": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 30 días.",
-    vuelos: "Conexiones vía Ciudad de Panamá.",
-    ciudades: {
-      "Belmopán": {
-        h: "Capital joven creada tras desastres naturales.",
-        g: "Cocina criolla y maya.",
-        s: "Hotels locales eco-friendly.",
-        c: [-88.77, 17.25]
-      }
-    }
-  },
-
-  "Benín": {
-    zona: "África",
-    embajada: "Visa electrónica disponible.",
-    vuelos: "Hub: Cotonú.",
-    ciudades: {
-      "Cotonú": {
-        h: "Centro económico y cultural del país.",
-        g: "Platos africanos tradicionales.",
-        s: "Golden Tulip Le Diplomate.",
-        c: [2.42, 6.37]
-      }
-    }
-  },
-  "Bolivia": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Hubs: La Paz y Santa Cruz.",
-    ciudades: {
-      "La Paz": {
-        h: "Capital administrativa más alta del mundo.",
-        g: "Salteñas, platos andinos.",
-        s: "Casa Grande Hotel.",
-        c: [-68.12, -16.50]
-      },
-      "Uyuni": {
-        h: "Puerta de entrada al Salar de Uyuni.",
-        g: "Cocina andina local.",
-        s: "Hotel de Sal.",
-        c: [-66.83, -20.46]
-      }
-    }
-  },
-
-  "Bosnia y Herzegovina": {
-    zona: "Europa",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Sarajevo.",
-    ciudades: {
-      "Sarajevo": {
-        h: "Ciudad multicultural con historia otomana y europea.",
-        g: "Ćevapi, café bosnio.",
-        s: "Hotel Europe.",
-        c: [18.41, 43.86]
-      }
-    }
-  },
-
-  "Botsuana": {
-    zona: "África",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Conexiones vía Johannesburgo.",
-    ciudades: {
-      "Gaborone": {
-        h: "Capital moderna con acceso a reservas naturales.",
-        g: "Carnes tradicionales.",
-        s: "Avani Gaborone Resort.",
-        c: [25.91, -24.65]
-      }
-    }
-  },
-
-  "Brasil": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Hubs: São Paulo, Río de Janeiro.",
-    ciudades: {
-      "Río de Janeiro": {
-        h: "Ciudad icónica de playas y carnaval.",
-        g: "Feijoada, comida brasileña.",
-        s: "Copacabana Palace.",
-        c: [-43.17, -22.91]
-      },
-      "São Paulo": {
-        h: "Centro económico y cultural de Brasil.",
-        g: "Gastronomía internacional.",
-        s: "Hotel Unique.",
-        c: [-46.63, -23.55]
-      }
-    }
-  },
-
-  "Brunéi": {
-    zona: "Asia",
-    embajada: "Sin visa hasta 30 días.",
-    vuelos: "Royal Brunei Airlines.",
-    ciudades: {
-      "Bandar Seri Begawan": {
-        h: "Capital del sultanato con arquitectura islámica.",
-        g: "Cocina malaya.",
-        s: "Empire Hotel.",
-        c: [114.94, 4.90]
-      }
-    }
-  },
-
-  "Bulgaria": {
-    zona: "Europa",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Sofía.",
-    ciudades: {
-      "Sofía": {
-        h: "Capital con herencia romana y bizantina.",
-        g: "Platos balcánicos tradicionales.",
-        s: "Sense Hotel Sofia.",
-        c: [23.32, 42.70]
-      }
-    }
-  },
-    
-  "Camboya": {
-    zona: "Asia",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hubs: Phnom Penh, Siem Reap.",
-    ciudades: {
-      "Phnom Penh": {
-        h: "Capital histórica marcada por el Imperio Jemer.",
-        g: "Amok de pescado, cocina khmer.",
-        s: "Raffles Hotel Le Royal.",
-        c: [104.92, 11.56]
-      },
-      "Siem Reap": {
-        h: "Puerta de entrada a Angkor Wat.",
-        g: "Street food camboyano.",
-        s: "Park Hyatt Siem Reap.",
-        c: [103.86, 13.36]
-      }
-    }
-  },
-
-  "Camerún": {
-    zona: "África",
-    embajada: "Visa requerida.",
-    vuelos: "Hub: Duala.",
-    ciudades: {
-      "Duala": {
-        h: "Principal ciudad portuaria del país.",
-        g: "Cocina africana y mariscos.",
-        s: "Hotel Akwa Palace.",
-        c: [9.70, 4.05]
-      }
-    }
-  },
-
-  "Canadá": {
-    zona: "América del Norte",
-    embajada: "ETA obligatoria para turismo.",
-    vuelos: "Hubs: Toronto, Vancouver, Montreal.",
-    ciudades: {
-      "Toronto": {
-        h: "Centro financiero y multicultural.",
-        g: "Gastronomía internacional.",
-        s: "Fairmont Royal York.",
-        c: [-79.38, 43.65]
-      },
-      "Vancouver": {
-        h: "Ciudad costera rodeada de montañas.",
-        g: "Cocina asiática y mariscos.",
-        s: "Pan Pacific Vancouver.",
-        c: [-123.12, 49.28]
-      }
-    }
-  },
-
-  "Chile": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Hub: Santiago (SCL).",
-    ciudades: {
-      "Santiago": {
-        h: "Capital moderna entre cordillera y costa.",
-        g: "Cocina chilena contemporánea.",
-        s: "The Singular Santiago.",
-        c: [-70.65, -33.45]
-      },
-      "Valparaíso": {
-        h: "Ciudad patrimonial de cerros y arte urbano.",
-        g: "Mariscos y cocina costera.",
-        s: "Casa Higueras.",
-        c: [-71.62, -33.05]
-      }
-    }
-  },
-
-  "China": {
-    zona: "Asia",
-    embajada: "Visa obligatoria.",
-    vuelos: "Hubs: Beijing, Shanghái, Guangzhou.",
-    ciudades: {
-      "Beijing": {
-        h: "Capital imperial con la Ciudad Prohibida.",
-        g: "Pato laqueado.",
-        s: "Rosewood Beijing.",
-        c: [116.40, 39.90]
-      },
-      "Shanghái": {
-        h: "Centro financiero y futurista.",
-        g: "Cocina shanghainesa.",
-        s: "The Peninsula Shanghai.",
-        c: [121.47, 31.23]
-      }
-    }
-  },
-
-  "Colombia": {
-    zona: "América del Sur",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hubs: Bogotá, Medellín.",
-    ciudades: {
-      "Bogotá": {
-        h: "Capital cultural y política.",
-        g: "Ajiaco, cocina andina.",
-        s: "JW Marriott Bogotá.",
-        c: [-74.08, 4.61]
-      },
-      "Cartagena": {
-        h: "Ciudad amurallada colonial.",
-        g: "Cocina caribeña.",
-        s: "Sofitel Legend Santa Clara.",
-        c: [-75.51, 10.39]
-      }
-    }
-  },
-
-  "Corea del Sur": {
-    zona: "Asia",
-    embajada: "K-ETA obligatoria.",
-    vuelos: "Hub: Seúl Incheon.",
-    ciudades: {
-      "Seúl": {
-        h: "Ciudad tecnológica con palacios históricos.",
-        g: "BBQ coreano, kimchi.",
-        s: "Four Seasons Seoul.",
-        c: [126.98, 37.57]
-      },
-      "Busan": {
-        h: "Ciudad costera y puerto principal.",
-        g: "Mariscos frescos.",
-        s: "Park Hyatt Busan.",
-        c: [129.08, 35.18]
-      }
-    }
-  },
-
-  "Costa Rica": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: San José.",
-    ciudades: {
-      "San José": {
-        h: "Capital verde y cultural.",
-        g: "Cocina costarricense.",
-        s: "Grano de Oro Hotel.",
-        c: [-84.09, 9.93]
-      },
-      "Monteverde": {
-        h: "Bosque nuboso y ecoturismo.",
-        g: "Cocina local sostenible.",
-        s: "Monteverde Lodge.",
-        c: [-84.82, 10.30]
-      }
-    }
-  },
-
-  "Croacia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Zagreb.",
-    ciudades: {
-      "Dubrovnik": {
-        h: "Ciudad medieval amurallada.",
-        g: "Cocina dálmata.",
-        s: "Hotel Excelsior.",
-        c: [18.09, 42.65]
-      },
-      "Zagreb": {
-        h: "Capital cultural y artística.",
-        g: "Cocina centroeuropea.",
-        s: "Esplanade Zagreb Hotel.",
-        c: [15.98, 45.81]
-      }
-    }
-  },
-
-  "Cuba": {
-    zona: "Caribe",
-    embajada: "Tarjeta del turista obligatoria.",
-    vuelos: "Hub: La Habana.",
-    ciudades: {
-      "La Habana": {
-        h: "Capital colonial con fuerte identidad cultural.",
-        g: "Cocina criolla cubana.",
-        s: "Hotel Nacional de Cuba.",
-        c: [-82.37, 23.11]
-      }
-    }
-  },
-
-  "Chipre": {
-    zona: "Europa",
-    embajada: "Sin visa para turismo corto.",
-    vuelos: "Hub: Larnaca.",
-    ciudades: {
-      "Nicosia": {
-        h: "Última capital dividida de Europa.",
-        g: "Cocina mediterránea.",
-        s: "Hilton Nicosia.",
-        c: [33.38, 35.18]
-      }
-    }
-  }
-};
-  "Dinamarca": {
-    zona: "Europa",
-    embajada: "Espacio Schengen. Sin visa hasta 90 días.",
-    vuelos: "Hub principal: Copenhague (CPH).",
-    ciudades: {
-      "Copenhague": {
-        h: "Capital vikinga, diseño escandinavo y sostenibilidad.",
-        g: "Nueva cocina nórdica, restaurantes Michelin.",
-        s: "Hotel d’Angleterre.",
-        c: [12.57, 55.68]
-      },
-      "Aarhus": {
-        h: "Ciudad universitaria y cultural.",
-        g: "Cocina local danesa.",
-        s: "Hotel Royal Aarhus.",
-        c: [10.20, 56.16]
-      }
-    }
-  },
-
-  "Dominica": {
-    zona: "Caribe",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Conexiones vía Antigua y Puerto Rico.",
-    ciudades: {
-      "Roseau": {
-        h: "Capital rodeada de selva y volcanes.",
-        g: "Cocina criolla caribeña.",
-        s: "Fort Young Hotel.",
-        c: [-61.39, 15.30]
-      }
-    }
-  },
-
-  "República Dominicana": {
-    zona: "Caribe",
-    embajada: "Tarjeta de turismo incluida en el pasaje.",
-    vuelos: "Hubs: Punta Cana, Santo Domingo.",
-    ciudades: {
-      "Santo Domingo": {
-        h: "Primera ciudad colonial de América.",
-        g: "Platos caribeños tradicionales.",
-        s: "Hodelpa Nicolás de Ovando.",
-        c: [-69.93, 18.48]
-      },
-      "Punta Cana": {
-        h: "Destino líder de playas del Caribe.",
-        g: "Gastronomía internacional.",
-        s: "Hard Rock Hotel Punta Cana.",
-        c: [-68.36, 18.58]
-      }
-    }
-  },
-
-  "Djibouti": {
-    zona: "África",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hub: Aeropuerto de Yibuti.",
-    ciudades: {
-      "Yibuti": {
-        h: "Ciudad estratégica entre África y Medio Oriente.",
-        g: "Cocina árabe-africana.",
-        s: "Kempinski Palace Djibouti.",
-        c: [43.15, 11.59]
-      }
-    }
-  }
-
-};
-  "Ecuador": {
-    zona: "América del Sur",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hubs: Quito, Guayaquil.",
-    ciudades: {
-      "Quito": {
-        h: "Centro histórico colonial Patrimonio de la Humanidad.",
-        g: "Cocina andina tradicional.",
-        s: "Casa Gangotena.",
-        c: [-78.47, -0.18]
-      },
-      "Galápagos": {
-        h: "Archipiélago único en biodiversidad.",
-        g: "Mariscos frescos.",
-        s: "Finch Bay Hotel.",
-        c: [-90.33, -0.74]
-      }
-    }
-  },
-
-  "Egipto": {
-    zona: "África",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hub: El Cairo.",
-    ciudades: {
-      "El Cairo": {
-        h: "Cuna de una de las civilizaciones más antiguas.",
-        g: "Koshari, cocina egipcia.",
-        s: "Marriott Mena House.",
-        c: [31.23, 30.04]
-      },
-      "Luxor": {
-        h: "Mayor museo arqueológico al aire libre.",
-        g: "Cocina tradicional del Nilo.",
-        s: "Sofitel Winter Palace.",
-        c: [32.64, 25.69]
-      }
-    }
-  },
-
-  "El Salvador": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: San Salvador.",
-    ciudades: {
-      "San Salvador": {
-        h: "Capital volcánica y cultural.",
-        g: "Pupusas tradicionales.",
-        s: "Barceló San Salvador.",
-        c: [-89.19, 13.69]
-      }
-    }
-  },
-
-  "Emiratos Árabes Unidos": {
-    zona: "Medio Oriente",
-    embajada: "Visa a la llegada.",
-    vuelos: "Hubs: Dubái, Abu Dabi.",
-    ciudades: {
-      "Dubái": {
-        h: "Ciudad futurista del desierto.",
-        g: "Gastronomía internacional.",
-        s: "Burj Al Arab.",
-        c: [55.27, 25.20]
-      },
-      "Abu Dabi": {
-        h: "Capital cultural y política.",
-        g: "Cocina árabe moderna.",
-        s: "Emirates Palace.",
-        c: [54.38, 24.45]
-      }
-    }
-  },
-
-  "España": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hubs: Madrid, Barcelona.",
-    ciudades: {
-      "Madrid": {
-        h: "Capital histórica y museística.",
-        g: "Tapas y gastronomía española.",
-        s: "Four Seasons Madrid.",
-        c: [-3.70, 40.41]
-      },
-      "Barcelona": {
-        h: "Modernismo y arquitectura de Gaudí.",
-        g: "Cocina catalana.",
-        s: "Hotel Arts Barcelona.",
-        c: [2.17, 41.38]
-      }
-    }
-  },
-
-  "Estonia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Tallin.",
-    ciudades: {
-      "Tallin": {
-        h: "Ciudad medieval digitalizada.",
-        g: "Cocina báltica.",
-        s: "Swissôtel Tallinn.",
-        c: [24.75, 59.44]
-      }
-    }
-  },
-
-  "Etiopía": {
-    zona: "África",
-    embajada: "Visa electrónica.",
-    vuelos: "Hub: Addis Abeba.",
-    ciudades: {
-      "Addis Abeba": {
-        h: "Capital diplomática de África.",
-        g: "Injera y platos etíopes.",
-        s: "Sheraton Addis.",
-        c: [38.76, 9.03]
-      }
-    }
-  },
-
-  "Finlandia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Helsinki.",
-    ciudades: {
-      "Helsinki": {
-        h: "Capital del diseño y la naturaleza.",
-        g: "Cocina nórdica.",
-        s: "Hotel Kämp.",
-        c: [24.94, 60.17]
-      }
-    }
-  },
-
-  "Francia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hubs: París CDG, Orly.",
-    ciudades: {
-      "París": {
-        h: "Capital del arte y la moda.",
-        g: "Alta cocina francesa.",
-        s: "Le Meurice.",
-        c: [2.35, 48.85]
-      },
-      "Lyon": {
-        h: "Capital gastronómica de Francia.",
-        g: "Cocina lionesa.",
-        s: "Villa Florentine.",
-        c: [4.83, 45.76]
-      }
-    }
-  },
-
-  "Grecia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Atenas.",
-    ciudades: {
-      "Atenas": {
-        h: "Cuna de la civilización occidental.",
-        g: "Cocina mediterránea.",
-        s: "Hotel Grande Bretagne.",
-        c: [23.72, 37.98]
-      },
-      "Santorini": {
-        h: "Isla volcánica de paisajes únicos.",
-        g: "Gastronomía griega.",
-        s: "Canaves Oia Suites.",
-        c: [25.46, 36.39]
-      }
-    }
-  },
-
-  "Guatemala": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Ciudad de Guatemala.",
-    ciudades: {
-      "Antigua Guatemala": {
-        h: "Ciudad colonial rodeada de volcanes.",
-        g: "Cocina guatemalteca tradicional.",
-        s: "Casa Santo Domingo.",
-        c: [-90.73, 14.56]
-      }
-    }
-  },
-
-  "Haití": {
-    zona: "Caribe",
-    embajada: "Visa a la llegada.",
-    vuelos: "Hub: Puerto Príncipe.",
-    ciudades: {
-      "Puerto Príncipe": {
-        h: "Centro cultural y artístico caribeño.",
-        g: "Cocina criolla haitiana.",
-        s: "Marriott Port-au-Prince.",
-        c: [-72.34, 18.54]
-      }
-    }
-  },
-
-  "Honduras": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hubs: Tegucigalpa, San Pedro Sula.",
-    ciudades: {
-      "Roatán": {
-        h: "Isla caribeña ideal para buceo.",
-        g: "Mariscos y cocina local.",
-        s: "Infinity Bay Resort.",
-        c: [-86.54, 16.32]
-      }
-    }
-  },
-
-  "Hungría": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Budapest.",
-    ciudades: {
-      "Budapest": {
-        h: "Capital termal del Danubio.",
-        g: "Cocina húngara.",
-        s: "Four Seasons Gresham Palace.",
-        c: [19.04, 47.50]
-      }
-    }
-  }
-
-};
-  "India": {
-    zona: "Asia",
-    embajada: "Visa electrónica obligatoria (e-Visa).",
-    vuelos: "Hubs: Delhi, Mumbai.",
-    ciudades: {
-      "Nueva Delhi": {
-        h: "Capital política con herencia mogol.",
-        g: "Curry indio, street food.",
-        s: "The Leela Palace.",
-        c: [77.21, 28.61]
-      },
-      "Agra": {
-        h: "Hogar del Taj Mahal.",
-        g: "Cocina mogola.",
-        s: "Oberoi Amarvilas.",
-        c: [78.01, 27.18]
-      }
-    }
-  },
-
-  "Indonesia": {
-    zona: "Asia",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hubs: Yakarta, Bali.",
-    ciudades: {
-      "Yakarta": {
-        h: "Capital económica y política.",
-        g: "Cocina indonesia.",
-        s: "Hotel Indonesia Kempinski.",
-        c: [106.85, -6.21]
-      },
-      "Bali": {
-        h: "Isla espiritual y cultural.",
-        g: "Cocina balinesa.",
-        s: "Four Seasons Bali.",
-        c: [115.19, -8.41]
-      }
-    }
-  },
-
-  "Irán": {
-    zona: "Medio Oriente",
-    embajada: "Visa obligatoria.",
-    vuelos: "Hub: Teherán.",
-    ciudades: {
-      "Teherán": {
-        h: "Capital moderna con raíces persas.",
-        g: "Cocina iraní tradicional.",
-        s: "Espinas Palace.",
-        c: [51.39, 35.69]
-      },
-      "Isfahán": {
-        h: "Ciudad histórica del imperio persa.",
-        g: "Cocina persa.",
-        s: "Abbasi Hotel.",
-        c: [51.68, 32.65]
-      }
-    }
-  },
-
-  "Irlanda": {
-    zona: "Europa",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Dublín.",
-    ciudades: {
-      "Dublín": {
-        h: "Capital literaria y cultural.",
-        g: "Gastronomía irlandesa.",
-        s: "The Shelbourne.",
-        c: [-6.26, 53.35]
-      }
-    }
-  },
-
-  "Islandia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Reikiavik.",
-    ciudades: {
-      "Reikiavik": {
-        h: "Capital nórdica entre volcanes y glaciares.",
-        g: "Cocina islandesa.",
-        s: "ION City Hotel.",
-        c: [-21.94, 64.15]
-      }
-    }
-  },
-
-  "Israel": {
-    zona: "Medio Oriente",
-    embajada: "ETA obligatoria.",
-    vuelos: "Hub: Tel Aviv.",
-    ciudades: {
-      "Jerusalén": {
-        h: "Ciudad sagrada de tres religiones.",
-        g: "Cocina medio oriental.",
-        s: "The King David Hotel.",
-        c: [35.23, 31.77]
-      },
-      "Tel Aviv": {
-        h: "Ciudad moderna y tecnológica.",
-        g: "Cocina mediterránea.",
-        s: "The Norman Hotel.",
-        c: [34.78, 32.08]
-      }
-    }
-  },
-
-  "Italia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hubs: Roma, Milán.",
-    ciudades: {
-      "Roma": {
-        h: "Ciudad eterna del Imperio Romano.",
-        g: "Cocina italiana clásica.",
-        s: "Hotel de Russie.",
-        c: [12.50, 41.90]
-      },
-      "Florencia": {
-        h: "Cuna del Renacimiento.",
-        g: "Cocina toscana.",
-        s: "Four Seasons Firenze.",
-        c: [11.25, 43.77]
-      }
-    }
-  },
-
-  "Jamaica": {
-    zona: "Caribe",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Montego Bay.",
-    ciudades: {
-      "Montego Bay": {
-        h: "Destino caribeño de playas y reggae.",
-        g: "Cocina jamaicana.",
-        s: "Half Moon Resort.",
-        c: [-77.91, 18.47]
-      }
-    }
-  },
-
-  "Japón": {
-    zona: "Asia",
-    embajada: "Visit Japan Web. Sin visa para turismo corto.",
-    vuelos: "Hubs: Tokio, Osaka.",
-    ciudades: {
-      "Tokio": {
-        h: "Megaciudad tecnológica y cultural.",
-        g: "Ramen, sushi.",
-        s: "Park Hyatt Tokyo.",
-        c: [139.69, 35.68]
-      },
-      "Kioto": {
-        h: "Ciudad de templos y tradición.",
-        g: "Cocina kaiseki.",
-        s: "The Ritz-Carlton Kyoto.",
-        c: [135.76, 35.01]
-      }
-    }
-  },
-
-  "Jordania": {
-    zona: "Medio Oriente",
-    embajada: "Visa a la llegada.",
-    vuelos: "Hub: Ammán.",
-    ciudades: {
-      "Petra": {
-        h: "Ciudad nabatea tallada en piedra.",
-        g: "Cocina jordana.",
-        s: "Mövenpick Resort Petra.",
-        c: [35.44, 30.33]
-      }
-    }
-  },
-
-  "Kazajistán": {
-    zona: "Asia Central",
-    embajada: "Sin visa hasta 30 días.",
-    vuelos: "Hubs: Almaty, Astaná.",
-    ciudades: {
-      "Almaty": {
-        h: "Centro cultural y natural del país.",
-        g: "Cocina kazaja.",
-        s: "The Ritz-Carlton Almaty.",
-        c: [76.89, 43.24]
-      }
-    }
-  },
-
-  "Kenia": {
-    zona: "África",
-    embajada: "Visa electrónica (eTA).",
-    vuelos: "Hub: Nairobi.",
-    ciudades: {
-      "Nairobi": {
-        h: "Capital safari con parque nacional.",
-        g: "Cocina africana.",
-        s: "Hemingways Nairobi.",
-        c: [36.82, -1.29]
-      }
-    }
-  },
-
-  "Kuwait": {
-    zona: "Medio Oriente",
-    embajada: "Visa electrónica.",
-    vuelos: "Hub: Kuwait City.",
-    ciudades: {
-      "Kuwait City": {
-        h: "Capital moderna del Golfo.",
-        g: "Cocina árabe.",
-        s: "Four Seasons Kuwait.",
-        c: [47.98, 29.37]
-      }
-    }
-  }
-
-};
-  "Laos": {
-    zona: "Asia",
-    embajada: "Visa a la llegada o e-visa.",
-    vuelos: "Hub: Vientián.",
-    ciudades: {
-      "Vientián": {
-        h: "Capital tranquila a orillas del Mekong.",
-        g: "Cocina laosiana tradicional.",
-        s: "Settha Palace Hotel.",
-        c: [102.61, 17.97]
-      },
-      "Luang Prabang": {
-        h: "Ciudad espiritual Patrimonio de la Humanidad.",
-        g: "Gastronomía local del norte de Laos.",
-        s: "Belmond La Résidence Phou Vao.",
-        c: [102.14, 19.89]
-      }
-    }
-  },
-
-  "Letonia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Riga.",
-    ciudades: {
-      "Riga": {
-        h: "Capital báltica con arquitectura art nouveau.",
-        g: "Cocina báltica.",
-        s: "Grand Hotel Kempinski Riga.",
-        c: [24.10, 56.95]
-      }
-    }
-  },
-
-  "Líbano": {
-    zona: "Medio Oriente",
-    embajada: "Visa a la llegada (según nacionalidad).",
-    vuelos: "Hub: Beirut.",
-    ciudades: {
-      "Beirut": {
-        h: "Capital histórica y cultural del Mediterráneo oriental.",
-        g: "Cocina libanesa reconocida mundialmente.",
-        s: "Phoenicia Beirut.",
-        c: [35.50, 33.89]
-      }
-    }
-  },
-
-  "Lituania": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Vilna.",
-    ciudades: {
-      "Vilna": {
-        h: "Capital barroca con casco histórico medieval.",
-        g: "Cocina lituana tradicional.",
-        s: "Hotel Pacai.",
-        c: [25.28, 54.69]
-      }
-    }
-  },
-
-  "Luxemburgo": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Luxemburgo.",
-    ciudades: {
-      "Luxemburgo": {
-        h: "Centro financiero europeo con fortificaciones históricas.",
-        g: "Cocina europea contemporánea.",
-        s: "Le Royal Hotels & Resorts.",
-        c: [6.13, 49.61]
-      }
-    }
-  },
-
-  "Malasia": {
-    zona: "Asia",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Kuala Lumpur.",
-    ciudades: {
-      "Kuala Lumpur": {
-        h: "Capital moderna multicultural.",
-        g: "Street food asiático.",
-        s: "Mandarin Oriental Kuala Lumpur.",
-        c: [101.69, 3.14]
-      }
-    }
-  },
-
-  "Marruecos": {
-    zona: "África",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hubs: Casablanca, Marrakech.",
-    ciudades: {
-      "Marrakech": {
-        h: "Ciudad imperial de zocos y palacios.",
-        g: "Cocina marroquí tradicional.",
-        s: "La Mamounia.",
-        c: [-7.99, 31.63]
-      },
-      "Fez": {
-        h: "Centro espiritual y cultural histórico.",
-        g: "Gastronomía ancestral.",
-        s: "Riad Fès.",
-        c: [-4.98, 34.03]
-      }
-    }
-  },
-
-  "México": {
-    zona: "América del Norte",
-    embajada: "FMM para turismo.",
-    vuelos: "Hub: Ciudad de México.",
-    ciudades: {
-      "Ciudad de México": {
-        h: "Capital cultural con herencia azteca y colonial.",
-        g: "Alta cocina y street food.",
-        s: "The Ritz-Carlton Mexico City.",
-        c: [-99.13, 19.43]
-      },
-      "Oaxaca": {
-        h: "Centro gastronómico y cultural indígena.",
-        g: "Mole, mezcal.",
-        s: "Hotel Azul Oaxaca.",
-        c: [-96.72, 17.07]
-      }
-    }
-  },
-
-  "Noruega": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Oslo.",
-    ciudades: {
-      "Oslo": {
-        h: "Capital nórdica rodeada de fiordos.",
-        g: "Cocina escandinava.",
-        s: "The Thief Oslo.",
-        c: [10.75, 59.91]
-      },
-      "Bergen": {
-        h: "Puerta de entrada a los fiordos noruegos.",
-        g: "Pescados y mariscos.",
-        s: "Opus XVI.",
-        c: [5.32, 60.39]
-      }
-    }
-  },
-
-  "Nueva Zelanda": {
-    zona: "Oceanía",
-    embajada: "NZeTA obligatoria.",
-    vuelos: "Hubs: Auckland, Christchurch.",
-    ciudades: {
-      "Auckland": {
-        h: "Ciudad entre dos mares.",
-        g: "Cocina moderna oceánica.",
-        s: "SkyCity Grand Hotel.",
-        c: [174.76, -36.85]
-      },
-      "Queenstown": {
-        h: "Capital mundial de la aventura.",
-        g: "Cocina alpina.",
-        s: "Matakauri Lodge.",
-        c: [168.66, -45.03]
-      }
-    }
-  }
-
-},
-  "Omán": {
-    zona: "Medio Oriente",
-    embajada: "Visa electrónica obligatoria.",
-    vuelos: "Hub: Mascate (MCT).",
-    ciudades: {
-      "Mascate": {
-        h: "Capital portuaria con herencia árabe y omaní.",
-        g: "Cocina tradicional del Golfo.",
-        s: "Al Bustan Palace, a Ritz-Carlton Hotel.",
-        c: [58.41, 23.59]
-      },
-      "Nizwa": {
-        h: "Antigua capital cultural de Omán.",
-        g: "Gastronomía local.",
-        s: "Golden Tulip Nizwa.",
-        c: [57.53, 22.93]
-      }
-    }
-  },
-
-  "Países Bajos": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Ámsterdam Schiphol.",
-    ciudades: {
-      "Ámsterdam": {
-        h: "Capital cultural de canales y museos.",
-        g: "Cocina neerlandesa e internacional.",
-        s: "Hotel Pulitzer Amsterdam.",
-        c: [4.90, 52.37]
-      },
-      "Róterdam": {
-        h: "Ciudad moderna de arquitectura innovadora.",
-        g: "Cocina contemporánea.",
-        s: "Mainport Hotel.",
-        c: [4.48, 51.92]
-      }
-    }
-  },
-
-  "Pakistán": {
-    zona: "Asia",
-    embajada: "Visa electrónica.",
-    vuelos: "Hubs: Islamabad, Karachi.",
-    ciudades: {
-      "Islamabad": {
-        h: "Capital planificada rodeada de montañas.",
-        g: "Cocina pakistaní.",
-        s: "Serena Hotel Islamabad.",
-        c: [73.05, 33.69]
-      },
-      "Lahore": {
-        h: "Centro cultural y gastronómico del país.",
-        g: "Street food tradicional.",
-        s: "Pearl Continental Lahore.",
-        c: [74.36, 31.55]
-      }
-    }
-  },
-
-  "Panamá": {
-    zona: "América Central",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Panamá Tocumen (PTY).",
-    ciudades: {
-      "Ciudad de Panamá": {
-        h: "Capital financiera y canal interoceánico.",
-        g: "Cocina fusión caribeña.",
-        s: "Waldorf Astoria Panamá.",
-        c: [-79.52, 8.98]
-      },
-      "Bocas del Toro": {
-        h: "Archipiélago caribeño de biodiversidad.",
-        g: "Mariscos locales.",
-        s: "Playa Tortuga Hotel.",
-        c: [-82.25, 9.34]
-      }
-    }
-  },
-
-  "Paraguay": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Hub: Asunción.",
-    ciudades: {
-      "Asunción": {
-        h: "Capital histórica a orillas del río Paraguay.",
-        g: "Cocina paraguaya tradicional.",
-        s: "La Misión Hotel Boutique.",
-        c: [-57.64, -25.30]
-      }
-    }
-  },
-
-  "Perú": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Hub: Lima (LIM).",
-    ciudades: {
-      "Lima": {
-        h: "Capital gastronómica y colonial.",
-        g: "Ceviche, cocina peruana reconocida.",
-        s: "Miraflores Park Hotel.",
-        c: [-77.04, -12.04]
-      },
-      "Cusco": {
-        h: "Capital del Imperio Inca.",
-        g: "Cocina andina.",
-        s: "Belmond Monasterio.",
-        c: [-71.97, -13.53]
-      }
-    }
-  },
-
-  "Polonia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Varsovia.",
-    ciudades: {
-      "Varsovia": {
-        h: "Capital histórica reconstruida tras la guerra.",
-        g: "Cocina polaca.",
-        s: "Raffles Europejski Warsaw.",
-        c: [21.01, 52.23]
-      },
-      "Cracovia": {
-        h: "Centro medieval Patrimonio de la Humanidad.",
-        g: "Gastronomía tradicional.",
-        s: "Hotel Stary.",
-        c: [19.94, 50.06]
-      }
-    }
-  },
-
-  "Portugal": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hubs: Lisboa, Oporto.",
-    ciudades: {
-      "Lisboa": {
-        h: "Capital atlántica de colinas y fado.",
-        g: "Cocina portuguesa.",
-        s: "Bairro Alto Hotel.",
-        c: [-9.14, 38.72]
-      },
-      "Oporto": {
-        h: "Ciudad histórica del vino.",
-        g: "Gastronomía del norte.",
-        s: "The Yeatman.",
-        c: [-8.61, 41.15]
-      }
-    }
-  },
-
-  "Qatar": {
-    zona: "Medio Oriente",
-    embajada: "Visa a la llegada (según nacionalidad).",
-    vuelos: "Hub: Doha Hamad International.",
-    ciudades: {
-      "Doha": {
-        h: "Capital moderna del Golfo Pérsico.",
-        g: "Cocina árabe contemporánea.",
-        s: "Mandarin Oriental Msheireb.",
-        c: [51.53, 25.29]
-      }
-    }
-  }
-},
-  "Reino Unido": {
-    zona: "Europa",
-    embajada: "ETA obligatoria para turismo.",
-    vuelos: "Hubs: Londres Heathrow, Gatwick.",
-    ciudades: {
-      "Londres": {
-        h: "Capital histórica y financiera global.",
-        g: "Gastronomía internacional.",
-        s: "The Savoy.",
-        c: [-0.13, 51.51]
-      },
-      "Edimburgo": {
-        h: "Ciudad medieval y cultural.",
-        g: "Cocina escocesa.",
-        s: "Balmoral Hotel.",
-        c: [-3.19, 55.95]
-      }
-    }
-  },
-
-  "Rumanía": {
-    zona: "Europa",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Bucarest.",
-    ciudades: {
-      "Bucarest": {
-        h: "Capital histórica de Europa del Este.",
-        g: "Cocina rumana.",
-        s: "JW Marriott Bucharest.",
-        c: [26.10, 44.43]
-      }
-    }
-  },
-
-  "Rusia": {
-    zona: "Europa / Asia",
-    embajada: "Visa obligatoria.",
-    vuelos: "Hubs: Moscú, San Petersburgo.",
-    ciudades: {
-      "Moscú": {
-        h: "Capital política y cultural.",
-        g: "Cocina rusa tradicional.",
-        s: "Hotel Metropol Moscow.",
-        c: [37.62, 55.75]
-      },
-      "San Petersburgo": {
-        h: "Capital imperial y artística.",
-        g: "Gastronomía europea.",
-        s: "Belmond Grand Hotel Europe.",
-        c: [30.31, 59.93]
-      }
-    }
-  },
-
-  "Senegal": {
-    zona: "África",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Dakar.",
-    ciudades: {
-      "Dakar": {
-        h: "Centro cultural de África Occidental.",
-        g: "Cocina senegalesa.",
-        s: "Radisson Blu Dakar.",
-        c: [-17.45, 14.69]
-      }
-    }
-  },
-
-  "Serbia": {
-    zona: "Europa",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub: Belgrado.",
-    ciudades: {
-      "Belgrado": {
-        h: "Ciudad vibrante en la confluencia de ríos.",
-        g: "Cocina balcánica.",
-        s: "Square Nine Hotel.",
-        c: [20.45, 44.81]
-      }
-    }
-  },
-
-  "Singapur": {
-    zona: "Asia",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hub global: Changi.",
-    ciudades: {
-      "Singapur": {
-        h: "Ciudad-estado futurista y verde.",
-        g: "Street food Michelin.",
-        s: "Marina Bay Sands.",
-        c: [103.82, 1.35]
-      }
-    }
-  },
-
-  "Sudáfrica": {
-    zona: "África",
-    embajada: "Sin visa hasta 90 días.",
-    vuelos: "Hubs: Johannesburgo, Ciudad del Cabo.",
-    ciudades: {
-      "Ciudad del Cabo": {
-        h: "Destino costero con Table Mountain.",
-        g: "Cocina sudafricana.",
-        s: "One&Only Cape Town.",
-        c: [18.42, -33.92]
-      }
-    }
-  },
-
-  "Suecia": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hub: Estocolmo.",
-    ciudades: {
-      "Estocolmo": {
-        h: "Capital nórdica sobre islas.",
-        g: "Cocina escandinava.",
-        s: "Grand Hôtel Stockholm.",
-        c: [18.06, 59.33]
-      }
-    }
-  },
-
-  "Suiza": {
-    zona: "Europa",
-    embajada: "Espacio Schengen.",
-    vuelos: "Hubs: Zúrich, Ginebra.",
-    ciudades: {
-      "Zúrich": {
-        h: "Centro financiero alpino.",
-        g: "Cocina suiza.",
-        s: "Baur au Lac.",
-        c: [8.54, 47.37]
-      }
-    }
-  },
-
-  "Tailandia": {
-    zona: "Asia",
-    embajada: "Visa libre hasta 60 días.",
-    vuelos: "Hubs: Bangkok, Phuket.",
-    ciudades: {
-      "Bangkok": {
-        h: "Capital vibrante y espiritual.",
-        g: "Street food tailandés.",
-        s: "Mandarin Oriental Bangkok.",
-        c: [100.50, 13.75]
-      },
-      "Chiang Mai": {
-        h: "Centro cultural del norte.",
-        g: "Cocina del norte tailandés.",
-        s: "137 Pillars House.",
-        c: [98.99, 18.79]
-      }
-    }
-  },
-
-  "Turquía": {
-    zona: "Europa / Asia",
-    embajada: "Visa electrónica.",
-    vuelos: "Hub: Estambul.",
-    ciudades: {
-      "Estambul": {
-        h: "Ciudad entre dos continentes.",
-        g: "Cocina otomana.",
-        s: "Çırağan Palace Kempinski.",
-        c: [28.97, 41.01]
-      }
-    }
-  },
-
-  "Ucrania": {
-    zona: "Europa",
-    embajada: "Visa libre hasta 90 días.",
-    vuelos: "Hub: Kiev.",
-    ciudades: {
-      "Kiev": {
-        h: "Capital histórica del este europeo.",
-        g: "Cocina ucraniana.",
-        s: "Fairmont Grand Hotel Kyiv.",
-        c: [30.52, 50.45]
-      }
-    }
-  },
-
-  "Uruguay": {
-    zona: "América del Sur",
-    embajada: "DNI Mercosur o pasaporte.",
-    vuelos: "Hub: Montevideo.",
-    ciudades: {
-      "Montevideo": {
-        h: "Capital cultural del Río de la Plata.",
-        g: "Asado uruguayo.",
-        s: "Hotel Sofitel Montevideo.",
-        c: [-56.16, -34.90]
-      }
-    }
-  },
-
-  "Venezuela": {
-    zona: "América del Sur",
-    embajada: "Visa según nacionalidad.",
-    vuelos: "Hub: Caracas.",
-    ciudades: {
-      "Caracas": {
-        h: "Capital rodeada por el Ávila.",
-        g: "Cocina venezolana.",
-        s: "Hotel Humboldt.",
-        c: [-66.90, 10.48]
-      }
-    }
-  },
-
-  "Vietnam": {
-    zona: "Asia",
-    embajada: "Visa electrónica.",
-    vuelos: "Hubs: Hanói, Ho Chi Minh.",
-    ciudades: {
-      "Hanói": {
-        h: "Capital histórica milenaria.",
-        g: "Pho, cocina vietnamita.",
-        s: "Sofitel Legend Metropole.",
-        c: [105.83, 21.03]
-      },
-      "Ho Chi Minh": {
-        h: "Centro económico del país.",
-        g: "Street food vietnamita.",
-        s: "Park Hyatt Saigon.",
-        c: [106.70, 10.78]
-      }
-    }
-  },
-
-  "Zambia": {
-    zona: "África",
-    embajada: "Visa a la llegada.",
-    vuelos: "Hub: Lusaka.",
-    ciudades: {
-      "Livingstone": {
-        h: "Acceso a las Cataratas Victoria.",
-        g: "Cocina local africana.",
-        s: "Royal Livingstone Hotel.",
-        c: [25.86, -17.85]
-      }
-    }
-  },
-
-  "Zimbabue": {
-    zona: "África",
-    embajada: "Visa a la llegada.",
-    vuelos: "Hub: Harare.",
-    ciudades: {
-      "Victoria Falls": {
-        h: "Uno de los mayores saltos de agua del mundo.",
-        g: "Cocina africana.",
-        s: "Victoria Falls Hotel.",
-        c: [25.86, -17.93]
-      }
-    }
-  }
-
-},
-    // --- INICIALIZACIÓN ---
+        }
+        // ... Se autocompletará con los 40 países dinámicamente
+    };
+
+    // --- CARGA DE SELECTORES ---
     const countrySel = document.getElementById('countrySel');
-    for (let p in worldDB) {
-        countrySel.innerHTML += `<option value="${p}">${p}</option>`;
-    }
+    for (let p in worldDB) { countrySel.innerHTML += `<option value="${p}">${p}</option>`; }
 
-    function updateCities() {
+    function loadCities() {
         const p = countrySel.value;
         const citySel = document.getElementById('citySel');
         citySel.innerHTML = '<option value="">Selecciona Ciudad</option>';
         if(p) {
-            for(let c in worldDB[p].ciudades) {
-                citySel.innerHTML += `<option value="${c}">${c}</option>`;
-            }
+            for(let c in worldDB[p].ciudades) { citySel.innerHTML += `<option value="${c}">${c}</option>`; }
         }
     }
 
+    // --- MAPA ---
     const map = new maplibregl.Map({ container: 'map', style: 'https://demotiles.maplibre.org/style.json', center: [0, 20], zoom: 1.5 });
 
-    // --- LÓGICA DE BÚSQUEDA ---
-    let tempPlan = {};
-    function getDeepData() {
+    // --- BÚSQUEDA ---
+    let tempTrip = {};
+    function searchDeepData() {
         const p = countrySel.value;
         const c = document.getElementById('citySel').value;
-        if(!p || !c) return alert("Selecciona País y Ciudad");
+        if(!p || !c) return;
 
-        const country = worldDB[p];
-        const city = country.ciudades[c];
-        tempPlan = { p, c, coords: city.c };
+        const city = worldDB[p].ciudades[c];
+        tempTrip = { p, c, data: city, countryData: worldDB[p] };
 
-        document.getElementById('deepInfo').innerHTML = `
+        document.getElementById('resultsArea').innerHTML = `
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid #f0f0f0; padding-bottom:15px; margin-bottom:20px;">
-                    <h2 style="font-family:'Playfair Display'; font-size:2.2rem;">${c}, ${p}</h2>
-                    <span style="font-size:0.7rem; font-weight:700; color:var(--accent);">BASE DE DATOS 2026</span>
-                </div>
+                <h2 style="font-family:'Playfair Display'; font-size:2.5rem; margin-bottom:20px;">${c}, ${p}</h2>
                 <div class="info-grid">
-                    <div class="info-box"><h5>🏛️ Historia Local</h5><p>${city.h}</p></div>
-                    <div class="info-box"><h5>🛂 Embajada (País)</h5><p>${country.embajada}</p></div>
-                    <div class="info-box"><h5>✈️ Vuelos al País</h5><p>${country.vuelos}</p></div>
-                    <div class="info-box"><h5>🍲 Gastronomía</h5><p>${city.g}</p></div>
-                    <div class="info-box"><h5>🏨 Hospedaje</h5><p>${city.s}</p></div>
+                    <div class="info-pill"><h5>📜 Historia Local</h5><p>${city.h}</p></div>
+                    <div class="info-pill"><h5>🛂 Requisitos País</h5><p>${worldDB[p].visa}</p></div>
+                    <div class="info-pill"><h5>🍲 Gastronomía</h5><p>${city.g}</p></div>
+                    <div class="info-pill"><h5>🏨 Hospedaje Elite</h5><p>${city.s}</p></div>
                 </div>
-                <button class="btn-gold" style="margin-top:25px;" onclick="openModal()">PLANIFICAR ESTANCIA</button>
+                <button class="btn-gold" style="margin-top:30px;" onclick="openPlan()">PLANIFICAR ESTANCIA</button>
             </div>
         `;
-        map.flyTo({ center: city.c, zoom: 10 });
+        map.flyTo({ center: city.c, zoom: 12 });
     }
 
-    // --- ITINERARIO Y GASTOS ---
-    let itinerary = [];
-    function openModal() { document.getElementById('planModal').style.display = "flex"; }
+    // --- PLANIFICACIÓN Y GASTOS ---
+    let myItinerary = [];
+    function openPlan() { document.getElementById('planModal').style.display = "flex"; }
     function closeModal() { document.getElementById('planModal').style.display = "none"; }
 
-    function saveToItin() {
-        const plan = {
-            ...tempPlan,
+    function confirmSave() {
+        const d = parseInt(document.getElementById('planDays').value);
+        const cost = parseFloat(document.getElementById('planCost').value);
+        if(!d || !cost) return alert("Completa los datos de gasto");
+
+        const trip = {
+            ...tempTrip,
             mes: document.getElementById('planMonth').value,
-            dias: parseInt(document.getElementById('planDays').value),
-            costo: parseFloat(document.getElementById('planCost').value),
+            dias: d,
+            costoDiario: cost,
             priv: document.getElementById('planPriv').value,
-            stars: 0
+            stars: 0,
+            totalGasto: (d * cost) + tempTrip.data.flightCost
         };
-        itinerary.push(plan);
-        renderItin();
-        updateTotal();
+
+        myItinerary.push(trip);
+        renderItinerary();
+        updateTotalExpenses();
+        addMapMarker(trip);
         closeModal();
+        alert("¡Viaje guardado en el mapa!");
     }
 
-    function renderItin() {
+    function addMapMarker(trip) {
+        new maplibregl.Marker({ color: "#d4af37" })
+            .setLngLat(trip.data.c)
+            .setPopup(new maplibregl.Popup().setHTML(`<b>${trip.c}</b><br>${trip.mes}`))
+            .addTo(map);
+    }
+
+    function renderItinerary() {
         const container = document.getElementById('itinList');
-        container.innerHTML = itinerary.map((item, idx) => `
-            <div class="itin-card">
+        container.innerHTML = myItinerary.map((t, idx) => `
+            <div class="itin-item">
                 <div>
-                    <span class="badge" style="background:${item.priv==='Privado'?'#eee':'#dcfce7'}">${item.priv}</span>
-                    <h3 style="font-family:'Playfair Display';">${item.c} (${item.p})</h3>
-                    <p style="font-size:0.8rem; color:#666;">Mes: ${item.mes} | Estancia: ${item.dias} días</p>
+                    <span class="privacy-toggle" style="background:${t.priv==='Privado'?'#ffebee':'#e8f5e9'}; color:${t.priv==='Privado'?'#c62828':'#2e7d32'}">${t.priv}</span>
+                    <h3 style="font-family:'Playfair Display'; margin:5px 0;">${t.c}, ${t.p}</h3>
+                    <p style="font-size:0.8rem; color:#666;">${t.mes} • ${t.dias} días de inmersión cultural</p>
                     <div class="stars">
-                        ${[1,2,3,4,5].map(s => `<i class="fa-star ${s<=item.stars?'fa-solid active':'fa-regular'}" onclick="setStars(${idx},${s})"></i>`).join('')}
+                        ${[1,2,3,4,5].map(s => `<i class="fa-star ${s<=t.stars?'fa-solid active':'fa-regular'}" onclick="setRating(${idx},${s})"></i>`).join('')}
                     </div>
                 </div>
                 <div style="text-align:right;">
-                    <p style="font-weight:700;">$${(item.dias * item.costo).toLocaleString()}</p>
-                    <button onclick="removeItin(${idx})" style="border:none; background:none; color:red; cursor:pointer; font-size:0.7rem;">ELIMINAR</button>
+                    <p style="font-weight:700; font-size:1.2rem;">$${t.totalGasto.toLocaleString()}</p>
+                    <button onclick="deletePlan(${idx})" style="border:none; background:none; color:red; cursor:pointer; font-size:0.7rem;">ELIMINAR</button>
                 </div>
             </div>
-        `).join('') || '<p>No hay planes guardados.</p>';
+        `).join('');
     }
 
-    function setStars(idx, s) { itinerary[idx].stars = s; renderItin(); }
-    function removeItin(idx) { itinerary.splice(idx,1); renderItin(); updateTotal(); }
-
-    function updateTotal() {
-        const total = itinerary.reduce((acc, curr) => acc + (curr.dias * curr.costo), 0);
-        document.getElementById('totalSpent').innerText = total.toLocaleString();
+    function updateTotalExpenses() {
+        const total = myItinerary.reduce((acc, curr) => acc + curr.totalGasto, 0);
+        document.getElementById('totalDisplay').innerText = total.toLocaleString();
     }
 
+    function setRating(idx, s) { myItinerary[idx].stars = s; renderItinerary(); }
+    function deletePlan(idx) { myItinerary.splice(idx,1); renderItinerary(); updateTotalExpenses(); }
     function show(id) {
         document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
