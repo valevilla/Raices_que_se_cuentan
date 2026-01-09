@@ -2,323 +2,344 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Raíces que se cuentan | Innovación Cultural</title>
+    <title>Raíces que se cuentan | Travel Tech Ecosystem</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            --primary: #0a0c12; --accent: #d4af37; --bg: #fdfdfd;
-            --white: #ffffff; --glass: rgba(255,255,255,0.9);
-            --shadow: 0 25px 60px rgba(0,0,0,0.1);
+            --primary: #0a111f; --accent: #d4af37; --bg: #f4f7f9;
+            --white: #ffffff; --glass: rgba(255,255,255,0.96);
+            --shadow: 0 15px 35px rgba(0,0,0,0.08);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--primary); overflow-x: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--primary); }
 
-        /* --- NAVEGACIÓN DINÁMICA --- */
+        /* NAVEGACIÓN */
         header {
-            background: var(--glass); backdrop-filter: blur(20px);
+            background: var(--glass); backdrop-filter: blur(15px);
             position: fixed; top: 0; width: 100%; z-index: 2000;
             padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
         }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--primary); cursor: pointer; }
-        
-        .menu-btn { 
-            background: var(--primary); color: white; border: none; padding: 12px 25px; 
-            border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.75rem;
-            display: flex; align-items: center; gap: 10px; transition: 0.3s;
-        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; }
+        nav { display: flex; gap: 20px; }
+        nav a { text-decoration: none; color: var(--primary); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        nav a:hover { color: var(--accent); }
 
-        .nav-overlay {
-            position: fixed; top: -100%; left: 0; width: 100%; height: 100vh;
-            background: var(--primary); z-index: 3000; transition: 0.8s cubic-bezier(0.85, 0, 0.15, 1);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .nav-overlay.open { top: 0; }
-        .nav-overlay a { color: white; font-size: 2.5rem; font-family: 'Playfair Display', serif; text-decoration: none; margin: 15px 0; transition: 0.3s; }
-        .nav-overlay a:hover { color: var(--accent); transform: scale(1.1); }
+        /* SECCIONES */
+        section { display: none; padding: 110px 5% 60px; min-height: 100vh; }
+        section.active { display: block; animation: fadeInUp 0.6s ease; }
+        @keyframes fadeInUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
-        /* --- SECCIONES --- */
-        section { display: none; padding: 110px 5% 50px; min-height: 100vh; }
-        section.active { display: block; animation: slideUp 0.6s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: var(--white); border-radius: 25px; padding: 30px; box-shadow: var(--shadow); margin-bottom: 25px; }
 
-        .card { background: var(--white); border-radius: 35px; padding: 35px; box-shadow: var(--shadow); margin-bottom: 25px; border: 1px solid #f0f0f0; }
-        
-        /* --- CONTROLES INTERACTIVOS --- */
-        .search-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        select, input { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid #eee; background: #fafafa; font-size: 1rem; outline: none; }
-        .btn-gold { background: var(--primary); color: white; border: none; padding: 20px; border-radius: 20px; font-weight: 800; cursor: pointer; transition: 0.4s; width: 100%; }
-        .btn-gold:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+        /* EXPLORAR */
+        .grid-plan { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        select, input, textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-family: inherit; outline: none; }
+        .btn-gold { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; }
+        .btn-gold:hover { background: var(--accent); transform: translateY(-2px); }
+        #map { width: 100%; height: 450px; border-radius: 25px; border: 8px solid white; box-shadow: var(--shadow); }
 
-        /* --- INFO DISPLAY --- */
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 25px; }
-        .info-pill { padding: 20px; background: #f8f9fb; border-radius: 25px; border-left: 5px solid var(--accent); position: relative; overflow: hidden; }
-        .info-pill h5 { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1.5px; }
-        .info-pill p { font-size: 0.9rem; line-height: 1.6; color: #333; }
+        /* ITINERARIO (RESEÑAS) */
+        .star-box i { font-size: 1.5rem; color: #cbd5e1; cursor: pointer; margin-right: 5px; }
+        .star-box i.active { color: var(--accent); }
+        .badge { font-size: 0.65rem; padding: 5px 12px; border-radius: 20px; font-weight: 800; text-transform: uppercase; }
+        .badge-pub { background: #e8f5e9; color: #2e7d32; }
+        .badge-priv { background: #f1f5f9; color: #475569; }
 
-        /* --- ITINERARIO & MAPA --- */
-        #map { width: 100%; height: 450px; border-radius: 35px; border: 10px solid white; box-shadow: var(--shadow); margin-top: 20px; }
-        .itin-item { border-bottom: 1px solid #f0f0f0; padding: 25px 0; display: flex; justify-content: space-between; align-items: center; }
-        .stars i { color: #ddd; cursor: pointer; font-size: 1.3rem; margin-right: 5px; }
-        .stars i.active { color: var(--accent); }
-        .privacy-toggle { font-size: 0.6rem; padding: 5px 12px; border-radius: 10px; font-weight: 700; text-transform: uppercase; }
+        /* GASTOS */
+        .expense-hero { background: var(--primary); color: white; padding: 50px; border-radius: 35px; text-align: center; margin-bottom: 30px; }
+        .currency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-top: 25px; }
+        .curr-item { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; }
 
-        /* --- DASHBOARD GASTOS --- */
-        .expense-card { background: var(--primary); color: white; padding: 40px; border-radius: 35px; text-align: center; margin-bottom: 30px; }
-        .expense-card h1 { font-size: 4rem; font-family: 'Playfair Display', serif; }
+        /* NOSOTROS & LÍNEA DE TIEMPO */
+        .timeline { position: relative; max-width: 800px; margin: 40px auto; padding: 20px 0; }
+        .timeline::after { content: ''; position: absolute; width: 4px; background: var(--accent); top: 0; bottom: 0; left: 50%; margin-left: -2px; }
+        .tl-item { padding: 10px 40px; position: relative; width: 50%; }
+        .tl-left { left: 0; text-align: right; }
+        .tl-right { left: 50%; }
+        .tl-item::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border: 4px solid var(--accent); top: 15px; border-radius: 50%; z-index: 1; }
+        .tl-left::after { right: -11px; }
+        .tl-right::after { left: -11px; }
 
-        /* MÓVIL */
-        @media (max-width: 768px) {
-            .search-container { grid-template-columns: 1fr; }
-            .logo { font-size: 1.1rem; }
-        }
+        /* CONTACTO */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .social-btn { display: flex; align-items: center; gap: 15px; padding: 15px; background: #f8fafc; border-radius: 15px; text-decoration: none; color: var(--primary); font-weight: 700; margin-bottom: 10px; border: 1px solid #eee; }
+        .social-btn:hover { border-color: var(--accent); background: white; }
+
+        /* RINKU BOT */
+        #rinku-bot { position: fixed; bottom: 25px; right: 25px; z-index: 5000; }
+        .rinku-icon { width: 85px; cursor: pointer; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        .rinku-chat { display: none; position: absolute; bottom: 95px; right: 0; width: 320px; background: white; border-radius: 25px; padding: 20px; box-shadow: var(--shadow); border: 2px solid var(--accent); }
+        .chat-body { max-height: 300px; overflow-y: auto; font-size: 0.85rem; line-height: 1.5; color: #444; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo" onclick="show('explorar')">Raíces que se cuentan</div>
-    <button class="menu-btn" onclick="toggleNav()">DESGLOSAR <i class="fa-solid fa-bars-staggered"></i></button>
+    <div class="logo">Raíces que se cuentan</div>
+    <nav>
+        <a onclick="show('explorar')">Explorar</a>
+        <a onclick="show('itinerario')">Itinerario</a>
+        <a onclick="show('gastos')">Gastos</a>
+        <a onclick="show('nosotros')">Nosotros</a>
+        <a onclick="show('contacto')">Contacto</a>
+    </nav>
 </header>
 
-<div class="nav-overlay" id="navOverlay">
-    <span onclick="toggleNav()" style="position:absolute; top:35px; right:5%; color:white; font-size:3rem; cursor:pointer;">&times;</span>
-    <a href="#" onclick="show('explorar')">Atlas Interactivo</a>
-    <a href="#" onclick="show('itinerario')">Mi Itinerario</a>
-    <a href="#" onclick="show('gastos')">Gastos Automáticos</a>
-    <a href="#" onclick="show('startup')">La Startup</a>
-</div>
-
-<main>
-    <section id="explorar" class="active">
-        <h1 style="font-family:'Playfair Display'; font-size: 3rem; margin-bottom: 10px;">Atlas 2026</h1>
-        <p style="color:#777; margin-bottom: 35px;">Selecciona tu próximo destino y profundiza en sus raíces culturales.</p>
-        
-        <div class="card">
-            <div class="search-container">
-                <select id="countrySel" onchange="loadCities()">
-                    <option value="">Selecciona un País...</option>
-                </select>
-                <select id="citySel">
-                    <option value="">Primero elige país</option>
-                </select>
-            </div>
-            <button class="btn-gold" onclick="searchDeepData()">DESCUBRIR CIUDAD</button>
+<section id="explorar" class="active">
+    <div class="card">
+        <h2 style="font-family:'Playfair Display'; margin-bottom:20px;">Nueva Planificación</h2>
+        <div class="grid-plan">
+            <select id="pSel" onchange="loadProv()"><option value="">Selecciona País</option></select>
+            <select id="prSel" onchange="loadDist()"><option value="">Provincia</option></select>
+            <select id="dSel"><option value="">Distrito</option></select>
         </div>
-
-        <div id="resultsArea"></div>
-        <div id="map"></div>
-    </section>
-
-    <section id="itinerario">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h2 style="font-family:'Playfair Display'; font-size:2.8rem;">Planes Guardados</h2>
-            <button class="btn-gold" style="width:auto; padding:12px 25px;" onclick="downloadPDF()">Exportar Itinerario</button>
+        <div class="grid-plan">
+            <input type="date" id="tDate">
+            <input type="number" id="tDays" placeholder="Días de estancia">
+            <select id="tAir">
+                <option value="">Aerolínea</option>
+                <option>LATAM</option><option>Iberia</option><option>Sky</option><option>Aerolíneas Argentinas</option>
+            </select>
         </div>
-        <div id="itinList" class="card">
-            <p style="text-align:center; color:#888; padding:40px;">Tu itinerario está vacío. Empieza explorando el Atlas.</p>
+        <div class="grid-plan">
+            <input type="number" id="tPax" placeholder="Personas">
+            <select id="tReason">
+                <option value="">Motivo del viaje</option>
+                <option>Turismo</option><option>Trabajo</option><option>Evento</option><option>Beca</option>
+            </select>
         </div>
-    </section>
-
-    <section id="gastos">
-        <h2 style="font-family:'Playfair Display'; font-size:2.8rem; margin-bottom:30px;">Control Financiero</h2>
-        <div class="expense-card">
-            <p style="font-size:0.8rem; letter-spacing:3px; opacity:0.7;">GASTO TOTAL PROYECTADO</p>
-            <h1>$ <span id="totalDisplay">0</span></h1>
-            <p style="margin-top:15px; font-size:0.9rem; opacity:0.8;">Incluye: Estadía + Vuelos sugeridos + Gastos Diarios</p>
-        </div>
-        <div id="expenseList"></div>
-    </section>
-
-    <section id="startup">
-        <div class="card" style="border-top: 12px solid var(--accent); padding: 50px;">
-            <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin-bottom:25px;">Sobre Nosotros</h2>
-            <p style="font-size:1.3rem; line-height:1.8; color:#333; margin-bottom:30px;">
-                <b>Raíces que se cuentan</b> es un canal innovador que une las raíces con el descubrimiento de nuevas culturas. 
-                Utilizamos inteligencia de datos para mapear la conexión entre la historia de una nación y el viajero moderno, 
-                ofreciendo una plataforma donde la logística y el patrimonio se encuentran.
-            </p>
-            <div class="info-grid">
-                <div class="info-box info-pill"><h5>Canal Innovador</h5><p>Contenido curado por historiadores y viajeros expertos.</p></div>
-                <div class="info-box info-pill"><h5>Tecnología</h5><p>Mapas interactivos con sincronización de gastos en tiempo real.</p></div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<div id="planModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100vh; background:rgba(0,0,0,0.95); z-index:4000; align-items:center; justify-content:center; padding:20px;">
-    <div class="card" style="max-width:500px; width:100%;">
-        <h3 id="planTitle" style="font-family:'Playfair Display'; font-size:1.8rem; margin-bottom:20px;">Personalizar Viaje</h3>
-        <label style="font-size:0.7rem; font-weight:700;">MES DEL VIAJE</label>
-        <select id="planMonth"><option>Enero</option><option>Abril</option><option>Julio</option><option>Septiembre</option><option>Diciembre</option></select>
-        <label style="font-size:0.7rem; font-weight:700;">DÍAS DE ESTANCIA</label>
-        <input type="number" id="planDays" placeholder="Ej: 10">
-        <label style="font-size:0.7rem; font-weight:700;">PRESUPUESTO DIARIO (USD)</label>
-        <input type="number" id="planCost" placeholder="Ej: 150">
-        <label style="font-size:0.7rem; font-weight:700;">PRIVACIDAD DE RESEÑA</label>
-        <select id="planPriv"><option value="Privado">Solo Yo (Privado)</option><option value="Público">Comunidad (Público)</option></select>
-        <button class="btn-gold" onclick="confirmSave()">GUARDAR EN MAPA E ITINERARIO</button>
-        <button onclick="closeModal()" style="background:none; border:none; width:100%; margin-top:20px; cursor:pointer; color:#999;">Cerrar sin guardar</button>
+        <button class="btn-gold" onclick="saveNewTrip()">GUARDAR PLAN Y MARCAR PIN DORADO</button>
     </div>
+    
+    <div class="card" id="infoPanel" style="display:none;">
+        <h4 id="infoTitle" style="margin-bottom:15px; color:var(--accent);">Guía del País</h4>
+        <div class="grid-plan" style="grid-template-columns: repeat(3, 1fr);">
+            <button class="btn-gold" style="font-size:0.6rem;" onclick="rinkuInfo('historia')">Historia</button>
+            <button class="btn-gold" style="font-size:0.6rem;" onclick="rinkuInfo('arquitectura')">Arquitectura</button>
+            <button class="btn-gold" style="font-size:0.6rem;" onclick="rinkuInfo('requisitos')">Requisitos</button>
+        </div>
+    </div>
+
+    <div id="map"></div>
+</section>
+
+<section id="itinerario">
+    <h1 style="font-family:'Playfair Display'; margin-bottom:25px;">Bitácoras de Viaje</h1>
+    <div id="itinList"></div>
+</section>
+
+<section id="gastos">
+    <div class="expense-hero">
+        <p style="font-size:0.8rem; letter-spacing:2px; opacity:0.8;">PRESUPUESTO CONSOLIDADO</p>
+        <h2 id="totalUSD" style="font-size:3.5rem; font-family:'Playfair Display';">$ 0.00</h2>
+        <div class="currency-grid">
+            <div class="curr-item"><small>SOLES (PEN)</small><br><b id="v-pen">0</b></div>
+            <div class="curr-item"><small>P. ARG (ARS)</small><br><b id="v-ars">0</b></div>
+            <div class="curr-item"><small>P. CHI (CLP)</small><br><b id="v-clp">0</b></div>
+            <div class="curr-item"><small>EURO (EUR)</small><br><b id="v-eur">0</b></div>
+        </div>
+    </div>
+    <div class="card">
+        <h3>Registrar Gasto Específico</h3>
+        <select id="expenseSelect" style="margin-top:10px;"></select>
+        <input type="number" id="expenseAmt" placeholder="Monto en USD" style="margin-top:10px;">
+        <button class="btn-gold" style="margin-top:10px;" onclick="addExpense()">Cargar Gasto</button>
+    </div>
+</section>
+
+<section id="nosotros">
+    <div class="card" style="text-align:center;">
+        <h1 style="font-family:'Playfair Display'; font-size:3rem;">Raíces que se cuentan</h1>
+        <p style="margin-top:20px; color:#555; line-height:1.7;">Somos una Startup de tecnología cultural que permite a los usuarios mapear su historia personal y colectiva.</p>
+    </div>
+    
+    <div class="timeline">
+        <div class="tl-item tl-left"><div class="card"><h4>2023: Inicios</h4><p>Nace la visión en Puno, Perú.</p></div></div>
+        <div class="tl-item tl-right"><div class="card"><h4>2024: Prototipo</h4><p>Lanzamiento del mapa geográfico.</p></div></div>
+        <div class="tl-item tl-left"><div class="card"><h4>2025: IA Rinku</h4><p>Automatización de itinerarios.</p></div></div>
+        <div class="tl-item tl-right"><div class="card"><h4>2026: Global</h4><p>Red de reseñas públicas mundial.</p></div></div>
+    </div>
+</section>
+
+<section id="contacto">
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Contáctanos</h3>
+            <p style="font-size:0.9rem; margin-bottom:15px;">raicesquesecuentan323@gmail.com</p>
+            <input type="text" placeholder="Nombre" style="margin-bottom:10px;">
+            <textarea placeholder="¿En qué podemos ayudarte?" style="height:120px; margin-bottom:10px;"></textarea>
+            <button class="btn-gold">Enviar Mensaje</button>
+        </div>
+        <div>
+            <h3>Nuestra Comunidad</h3>
+            <a href="#" class="social-btn"><i class="fa-brands fa-instagram" style="color:#E1306C"></i> Instagram</a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-whatsapp" style="color:#25D366"></i> Canal de Difusión</a>
+        </div>
+    </div>
+</section>
+
+<div id="rinku-bot">
+    <div class="rinku-chat" id="rinkuChat">
+        <h4 style="margin-bottom:10px;">Rinku AI 🐒</h4>
+        <div id="chatContent" class="chat-body">
+            ¡Hola! Soy Rinku. Pregúntame una ruta (ej: "Mendoza a Santiago") y te daré un itinerario sugerido.
+        </div>
+        <input type="text" id="chatInput" placeholder="Escribe tu ruta..." style="margin-top:10px; padding:10px; font-size:0.8rem;">
+        <button class="btn-gold" style="margin-top:5px; padding:8px;" onclick="rinkuAsk()">Consultar</button>
+    </div>
+    <img src="https://img.icons8.com/clouds/100/monkey.png" class="rinku-icon" onclick="toggleRinku()">
 </div>
 
 <script>
-    // --- DATABASE MAESTRA: 40 PAÍSES Y CIUDADES ---
-    const worldDB = {
-        "Perú": {
-            visa: "Sin visa para turismo (90 días). Pasaporte vigente.",
-            vuelos: "Hub: Jorge Chávez (LIM). Aerolíneas: LATAM, Sky, Iberia.",
-            ciudades: {
-                "Lima": { h: "Capital del Virreinato, cuna de la gastronomía mundial.", g: "Central (Mundo), Maido (Nikkei), Cevichería La Mar.", s: "Hotel B (Barranco), Westin Lima.", c: [-77.04, -12.04], flightCost: 800 },
-                "Cusco": { h: "Ombligo del Mundo Inca. Acceso a Machu Picchu.", g: "Cicciolina, Chicha by Gastón Acurio.", s: "Palacio del Inka, Belmond Monasterio.", c: [-71.96, -13.53], flightCost: 950 }
-            }
-        },
-        "Japón": {
-            visa: "Registro Visit Japan Web. Visa libre para 68 países.",
-            vuelos: "Aeropuertos Narita y Haneda. ANA, JAL, Emirates.",
-            ciudades: {
-                "Tokyo": { h: "Centro tecnológico y espiritual de Asia.", g: "Mercado Tsukiji, Sukiyabashi Jiro.", s: "Aman Tokyo, Park Hyatt.", c: [139.69, 35.68], flightCost: 1400 },
-                "Kyoto": { h: "Capital cultural con más de 1600 templos.", g: "Gion Karyo (Kaiseki).", s: "The Ritz-Carlton Kyoto.", c: [135.76, 35.01], flightCost: 1450 }
-            }
-        },
-        "España": {
-            visa: "Schengen. Requisito ETIAS vigente desde 2026.",
-            vuelos: "Iberia (Hub Madrid). AVE conecta ciudades en 3h.",
-            ciudades: {
-                "Madrid": { h: "Triángulo del Arte y gastronomía castiza.", g: "DiverXO, Mercado de San Miguel.", s: "Four Seasons Madrid.", c: [-3.70, 40.41], flightCost: 700 },
-                "Barcelona": { h: "Modernismo de Gaudí y brisa del Mediterráneo.", g: "Disfrutar, Tickets.", s: "Hotel W Barcelona.", c: [2.17, 41.38], flightCost: 750 }
-            }
-        },
-        "México": {
-            visa: "Forma Migratoria Múltiple. Visa según nacionalidad.",
-            vuelos: "Aeroméxico. Hub: AICM.",
-            ciudades: {
-                "CDMX": { h: "Construida sobre la antigua Tenochtitlán.", g: "Pujol, Quintonil, El Vilsito.", s: "Four Seasons Reforma.", c: [-99.13, 19.43], flightCost: 400 },
-                "Oaxaca": { h: "Corazón zapoteca y mixteca.", g: "Los Danzantes, Criollo.", s: "Quinta Real Oaxaca.", c: [-96.72, 17.07], flightCost: 500 }
-            }
-        }
-        // ... Se autocompletará con los 40 países dinámicamente
+    const db = {
+        "Perú": { prov: { "Lima": ["Miraflores", "Barranco"], "Cusco": ["Urubamba"] }, historia: "Cuna del Imperio Inca.", arquitectura: "Mezcla Colonial e Inca.", requisitos: "DNI o Pasaporte." },
+        "Chile": { prov: { "Santiago": ["Providencia"] }, historia: "Tierra de contrastes.", arquitectura: "Moderna y Neoclásica.", requisitos: "Visa según país." },
+        "Argentina": { prov: { "Mendoza": ["Chacras de Coria"] }, historia: "Tierra del sol y el buen vino.", arquitectura: "Europea clásica.", requisitos: "DNI Mercosur." }
     };
 
-    // --- CARGA DE SELECTORES ---
-    const countrySel = document.getElementById('countrySel');
-    for (let p in worldDB) { countrySel.innerHTML += `<option value="${p}">${p}</option>`; }
+    const TASAS = { PEN: 3.82, ARS: 860, CLP: 950, EUR: 0.92 };
+    let myTrips = [];
 
-    function loadCities() {
-        const p = countrySel.value;
-        const citySel = document.getElementById('citySel');
-        citySel.innerHTML = '<option value="">Selecciona Ciudad</option>';
-        if(p) {
-            for(let c in worldDB[p].ciudades) { citySel.innerHTML += `<option value="${c}">${c}</option>`; }
+    function show(id) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'explorar') map.resize();
+    }
+
+    const map = new maplibregl.Map({ container: 'map', style: 'https://demotiles.maplibre.org/style.json', center: [-75, -15], zoom: 3 });
+
+    const pS = document.getElementById('pSel');
+    for(let p in db) pS.innerHTML += `<option value="${p}">${p}</option>`;
+
+    function loadProv() {
+        const pr = document.getElementById('prSel'); pr.innerHTML = '<option value="">Provincia</option>';
+        if(db[pS.value]) {
+            for(let x in db[pS.value].prov) pr.innerHTML += `<option value="${x}">${x}</option>`;
+            document.getElementById('infoPanel').style.display = 'block';
+            document.getElementById('infoTitle').innerText = `Guía de ${pS.value}`;
         }
     }
 
-    // --- MAPA ---
-    const map = new maplibregl.Map({ container: 'map', style: 'https://demotiles.maplibre.org/style.json', center: [0, 20], zoom: 1.5 });
-
-    // --- BÚSQUEDA ---
-    let tempTrip = {};
-    function searchDeepData() {
-        const p = countrySel.value;
-        const c = document.getElementById('citySel').value;
-        if(!p || !c) return;
-
-        const city = worldDB[p].ciudades[c];
-        tempTrip = { p, c, data: city, countryData: worldDB[p] };
-
-        document.getElementById('resultsArea').innerHTML = `
-            <div class="card">
-                <h2 style="font-family:'Playfair Display'; font-size:2.5rem; margin-bottom:20px;">${c}, ${p}</h2>
-                <div class="info-grid">
-                    <div class="info-pill"><h5>📜 Historia Local</h5><p>${city.h}</p></div>
-                    <div class="info-pill"><h5>🛂 Requisitos País</h5><p>${worldDB[p].visa}</p></div>
-                    <div class="info-pill"><h5>🍲 Gastronomía</h5><p>${city.g}</p></div>
-                    <div class="info-pill"><h5>🏨 Hospedaje Elite</h5><p>${city.s}</p></div>
-                </div>
-                <button class="btn-gold" style="margin-top:30px;" onclick="openPlan()">PLANIFICAR ESTANCIA</button>
-            </div>
-        `;
-        map.flyTo({ center: city.c, zoom: 12 });
+    function loadDist() {
+        const d = document.getElementById('dSel'); d.innerHTML = '<option value="">Distrito</option>';
+        const prov = document.getElementById('prSel').value;
+        if(prov) db[pS.value].prov[prov].forEach(x => d.innerHTML += `<option value="${x}">${x}</option>`);
     }
 
-    // --- PLANIFICACIÓN Y GASTOS ---
-    let myItinerary = [];
-    function openPlan() { document.getElementById('planModal').style.display = "flex"; }
-    function closeModal() { document.getElementById('planModal').style.display = "none"; }
-
-    function confirmSave() {
-        const d = parseInt(document.getElementById('planDays').value);
-        const cost = parseFloat(document.getElementById('planCost').value);
-        if(!d || !cost) return alert("Completa los datos de gasto");
-
-        const trip = {
-            ...tempTrip,
-            mes: document.getElementById('planMonth').value,
-            dias: d,
-            costoDiario: cost,
-            priv: document.getElementById('planPriv').value,
-            stars: 0,
-            totalGasto: (d * cost) + tempTrip.data.flightCost
+    function saveNewTrip() {
+        const t = {
+            id: Date.now(),
+            dist: document.getElementById('dSel').value,
+            pais: pS.value,
+            fecha: document.getElementById('tDate').value,
+            dias: document.getElementById('tDays').value,
+            motivo: document.getElementById('tReason').value,
+            pax: document.getElementById('tPax').value,
+            stars: 0, review: "", priv: "Privado", gasto: 0, likes: 0
         };
-
-        myItinerary.push(trip);
-        renderItinerary();
-        updateTotalExpenses();
-        addMapMarker(trip);
-        closeModal();
-        alert("¡Viaje guardado en el mapa!");
-    }
-
-    function addMapMarker(trip) {
+        if(!t.dist) return alert("Completa los datos");
+        myTrips.push(t);
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4af37', '#0a111f'] });
+        
         new maplibregl.Marker({ color: "#d4af37" })
-            .setLngLat(trip.data.c)
-            .setPopup(new maplibregl.Popup().setHTML(`<b>${trip.c}</b><br>${trip.mes}`))
+            .setLngLat(map.getCenter())
+            .setPopup(new maplibregl.Popup().setHTML(`<b>${t.dist}</b><br>${t.dias} días | ${t.motivo}`))
             .addTo(map);
+
+        updateItin();
+        updateExpSelect();
+        alert("¡Viaje guardado con Pin Dorado!");
     }
 
-    function renderItinerary() {
-        const container = document.getElementById('itinList');
-        container.innerHTML = myItinerary.map((t, idx) => `
-            <div class="itin-item">
-                <div>
-                    <span class="privacy-toggle" style="background:${t.priv==='Privado'?'#ffebee':'#e8f5e9'}; color:${t.priv==='Privado'?'#c62828':'#2e7d32'}">${t.priv}</span>
-                    <h3 style="font-family:'Playfair Display'; margin:5px 0;">${t.c}, ${t.p}</h3>
-                    <p style="font-size:0.8rem; color:#666;">${t.mes} • ${t.dias} días de inmersión cultural</p>
-                    <div class="stars">
-                        ${[1,2,3,4,5].map(s => `<i class="fa-star ${s<=t.stars?'fa-solid active':'fa-regular'}" onclick="setRating(${idx},${s})"></i>`).join('')}
-                    </div>
+    function updateItin() {
+        const list = document.getElementById('itinList');
+        list.innerHTML = myTrips.map((t, idx) => `
+            <div class="card">
+                <div style="display:flex; justify-content:space-between;">
+                    <span class="badge ${t.priv==='Público'?'badge-pub':'badge-priv'}">${t.priv}</span>
+                    <small>${t.fecha} | ${t.pax} Personas</small>
                 </div>
-                <div style="text-align:right;">
-                    <p style="font-weight:700; font-size:1.2rem;">$${t.totalGasto.toLocaleString()}</p>
-                    <button onclick="deletePlan(${idx})" style="border:none; background:none; color:red; cursor:pointer; font-size:0.7rem;">ELIMINAR</button>
+                <h3>${t.dist}, ${t.pais}</h3>
+                <p style="font-size:0.8rem; color:#666;">Motivo: ${t.motivo} | Estancia: ${t.dias} días</p>
+                <div class="star-box" style="margin:10px 0;">
+                    ${[1,2,3,4,5].map(s => `<i class="fa-solid fa-star ${s <= t.stars?'active':''}" onclick="rate(${idx},${s})"></i>`).join('')}
                 </div>
+                <textarea id="rev-${idx}" onchange="myTrips[${idx}].review=this.value" placeholder="Reseña..." style="height:60px;">${t.review}</textarea>
+                <div style="margin-top:10px; display:flex; gap:10px;">
+                    <button class="btn-gold" style="font-size:0.6rem; padding:8px;" onclick="setPriv(${idx},'Público')">Hacer Público</button>
+                    <button class="btn-gold" style="font-size:0.6rem; padding:8px; background:#666;" onclick="setPriv(${idx},'Privado')">Hacer Privado</button>
+                </div>
+                ${t.priv==='Público'?`<div style="margin-top:10px; font-size:0.75rem;"><i class="fa-solid fa-thumbs-up"></i> Útil para la comunidad (${t.likes})</div>`:''}
             </div>
         `).join('');
     }
 
-    function updateTotalExpenses() {
-        const total = myItinerary.reduce((acc, curr) => acc + curr.totalGasto, 0);
-        document.getElementById('totalDisplay').innerText = total.toLocaleString();
+    function rate(idx, s) { myTrips[idx].stars = s; updateItin(); }
+    function setPriv(idx, p) { 
+        myTrips[idx].priv = p; 
+        if(p==='Público') myTrips[idx].likes = Math.floor(Math.random()*20);
+        updateItin(); 
     }
 
-    function setRating(idx, s) { myItinerary[idx].stars = s; renderItinerary(); }
-    function deletePlan(idx) { myItinerary.splice(idx,1); renderItinerary(); updateTotalExpenses(); }
-    function show(id) {
-        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        toggleNav();
-        if(id === 'explorar') map.resize();
+    function updateExpSelect() {
+        const s = document.getElementById('expenseSelect');
+        s.innerHTML = myTrips.map(t => `<option value="${t.id}">${t.dist} (${t.fecha})</option>`).join('');
     }
-    function toggleNav() { document.getElementById('navOverlay').classList.toggle('open'); }
-    function downloadPDF() { html2pdf().from(document.getElementById('itinList')).save('itinerario-raices.pdf'); }
+
+    function addExpense() {
+        const id = document.getElementById('expenseSelect').value;
+        const amt = parseFloat(document.getElementById('expenseAmt').value);
+        const trip = myTrips.find(t => t.id == id);
+        if(trip && amt) { 
+            trip.gasto += amt; 
+            updateTotals(); 
+            alert("Gasto registrado");
+        }
+    }
+
+    function updateTotals() {
+        const total = myTrips.reduce((acc, t) => acc + t.gasto, 0);
+        document.getElementById('totalUSD').innerText = `$ ${total.toFixed(2)}`;
+        document.getElementById('v-pen').innerText = (total * TASAS.PEN).toLocaleString();
+        document.getElementById('v-ars').innerText = (total * TASAS.ARS).toLocaleString();
+        document.getElementById('v-clp').innerText = (total * TASAS.CLP).toLocaleString();
+        document.getElementById('v-eur').innerText = (total * TASAS.EUR).toLocaleString();
+    }
+
+    function toggleRinku() {
+        const c = document.getElementById('rinkuChat');
+        c.style.display = c.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function rinkuAsk() {
+        const q = document.getElementById('chatInput').value.toLowerCase();
+        const content = document.getElementById('chatContent');
+        let res = "Rinku: No tengo esa ruta aún, prueba 'Lima a Cusco'.";
+        
+        if(q.includes("lima") && q.includes("cusco")) {
+            res = "Rinku: 🐒 ¡Gran ruta! Día 1: Lima histórica. Día 2: Vuelo a Cusco. Día 3: Machu Picchu vía Urubamba.";
+        } else if(q.includes("mendoza") && q.includes("santiago")) {
+            res = "Rinku: 🐒 Cruce de los Andes! Día 1: Bodegas en Mendoza. Día 2: Bus Cruce fronterizo. Día 3: Santiago Sky Costanera.";
+        }
+        content.innerHTML += `<div style="margin-top:10px; border-top:1px solid #eee; padding-top:5px;"><b>Tú:</b> ${q}<br><b>Rinku:</b> ${res}</div>`;
+        content.scrollTop = content.scrollHeight;
+    }
+
+    function rinkuInfo(tipo) {
+        const p = pS.value;
+        if(!p) return alert("Selecciona un país");
+        alert(`Rinku dice sobre ${tipo} en ${p}: ${db[p][tipo]}`);
+    }
 </script>
 </body>
 </html>
